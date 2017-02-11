@@ -70,33 +70,41 @@
 \crefname{app}{appendix}{appendices}
 \Crefname{app}{Appendix}{Appendices}
 
+%%%%%%%%%% BEGIN %%%%%%%%%%
 \begin{document}
 
+%%%%%%%%%% FRONTMATTER
 % Declarations for Front Matter
 \input{frontmatter}
 
+%%%%%%%%%% TITLE
 \maketitle
 
 \begin{frontmatter}
 
-% Custom made for Cal Poly (by Mark Barry, modified by Andrew Tsui).
+%%%%%%%%%% COPYRIGHT
 \copyrightpage
 
-% Custom made for Cal Poly (by Andrew Tsui).
+%%%%%%%%%% COMMITTEE
 \committeemembershippage
 
+%%%%%%%%%% ABSTRACT
 \begin{abstract}
-\input{abstract}
+\input{001abstract}
 \end{abstract}
 
+%%%%%%%%%% ACKNOWLEDGEMENTS
 \begin{acknowledgements}
 \input{acknowledgements}
 \end{acknowledgements}
 
+%%%%%%%%%% TABLE OF CONTENTS
 \tableofcontents
 
+%%% TABLES
 \listoftables
 
+%%% FIGURES
 \listoffigures
 
 % Add CHAPTER into table of contents.
@@ -106,15 +114,19 @@
 
 \end{frontmatter}
 
+%%%%%%%%%% CONTENT %%%%%%%%%%
 \pagestyle{plain}
 
 \renewcommand{\baselinestretch}{1.66}
 
-\input{chapter-outline}
+%%%%%%%%%% CHAPTERS
+\input{002chapter-outline}
 
+%%%%%%%%%% BIBLIOGRAPHY
 \nocite{*}
 \bibliography{bibliography}
 
+%%%%%%%%%% APPENDICES
 % Indents Appendix in Table of Contents
 \makeatletter
 \addtocontents{toc}{\let\protect\l@chapter\protect\l@section}
@@ -129,3 +141,4 @@
 \end{appendices}
 
 \end{document}
+%%%%%%%%%% END %%%%%%%%%%
