@@ -1,59 +1,86 @@
 \documentclass[12pt]{ucthesis}
 
-\usepackage{etex}
-\usepackage[morefloats=125]{morefloats}
-\usepackage[hyphens]{url}
-\usepackage{subfig}
-\usepackage{graphicx}
-\usepackage{tabularx}
-\usepackage{amssymb}
+% MATH PACKAGES
 \usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathrsfs}
+
+% FORMAT UTILITIES
+\usepackage{indentfirst}
 \usepackage[letterpaper]{geometry}
 \usepackage[overload]{textcase}
-\usepackage{color}
-\usepackage[nonumberlist,toc]{glossaries}
-\usepackage{wrapfig}
+\usepackage{etex}
+\usepackage{enumerate}
+\usepackage[hyphens]{url}
+\usepackage{listings}
+\usepackage[]{algorithm2e}
+
+% FLOAT UTILITIES
 \usepackage{longtable}
+\usepackage{tabularx}
+\usepackage[morefloats=125]{morefloats}
 \usepackage{morefloats}
 \usepackage{float}
-\usepackage{listings}
+%\usepackage{subfig}
+%\usepackage{subcaption}
+\usepackage{wrapfig}
 \usepackage{makecell}
+
+% VISUAL UTILITIES
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{decorations.pathreplacing}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.3}
+\usepackage{color}
+\usepackage{xcolor}
+\definecolor{cpgreen}{HTML}{0A7951}
+\definecolor{cpgold}{HTML}{FADA5E}
+
+% DOCUMENT UTILITIES
 \usepackage{appendix}
 \usepackage{cleveref}
-\usepackage[]{algorithm2e}
 \usepackage{titlesec}
-\usepackage[breaklinks=true,hidelinks,pdfusetitle]{hyperref}
 \usepackage{ifthen}
 
-\makeindex
+% INDEX & GLOSSARY UTILITIES
+\usepackage[toc]{glossaries}
+\usepackage{imakeidx}
 \makeglossaries
+\makeindex[intoc]
+\usepackage[breaklinks=true,hidelinks,pdfusetitle,plainpages=false]{hyperref}
 
-% Shrink the size of headers
+% MACROS
+\usepackage{cplop}
+
+% Shrink header size
 \titleformat{\chapter}[display]
         {\normalfont\normalsize\centering}
         {\ifthenelse{\equal{\thechapter}{A}}{APPENDICES\\[4.3ex]}{}\chaptertitlename\ \thechapter}
         {0pt}{\normalsize\uppercase}
 \titlespacing*{\chapter}{0pt}{-20pt}{4.3ex plus .2ex}
 
-
+% Title Format
 \titleformat*{\section}{\normalsize\bfseries}
 \titleformat*{\subsection}{\small\bfseries}
 \titleformat*{\subsubsection}{\small\bfseries}
 \titleformat*{\paragraph}{\small\bfseries}
 \titleformat*{\subparagraph}{\small\bfseries}
 
+% Bibliography Style
 \bibliographystyle{abbrv}
 
 \setlength{\parindent}{0.25in} \setlength{\parskip}{6pt}
 \geometry{verbose,nohead,tmargin=1in,bmargin=1in,lmargin=1.5in,rmargin=1in}
 \setcounter{tocdepth}{2}
 
-% Different font in captions (single-spaced, bold) ------------
+% Different font in captions (single-spaced, bold)
 \newcommand{\captionfonts}{\small\bf\ssp}
-
 \newcommand{\mycaption}[2]{\caption[#1 --- #2]{#1 --- #2}}
 
-\makeatletter  % Allow the use of @ in command names
+% ---------------------------------------
+% Allow the use of @ in command names
+\makeatletter
 \long\def\@makecaption#1#2{%
   \vskip\abovecaptionskip
   \sbox\@tempboxa{{\captionfonts #1: #2}}%
@@ -75,7 +102,7 @@
 
 %%%%%%%%%% FRONTMATTER
 % Declarations for Front Matter
-\input{frontmatter}
+\input{0000frontmatter}
 
 %%%%%%%%%% TITLE
 \maketitle
@@ -122,9 +149,19 @@
 %%%%%%%%%% CHAPTERS
 \input{002chapter-outline}
 
+%%%%%%%%%% GLOSSARY
+\printglossaries
+
+%%%%%%%%%% INDEX
+\clearpage
+\phantomsection
+%\addcontentsline{toc}{chapter}{Index}
+\printindex
+
 %%%%%%%%%% BIBLIOGRAPHY
 \nocite{*}
 \bibliography{bibliography}
+
 
 %%%%%%%%%% APPENDICES
 % Indents Appendix in Table of Contents
