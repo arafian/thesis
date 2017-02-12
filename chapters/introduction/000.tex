@@ -1,4 +1,4 @@
-\chapter{Introduction}
+\chapter{Introduction}\label{chap:introduction}
 %%%% PROBLEM
 Fecal contamination in public water sources is an issue that health officials and city and county governments must combat regularly.
 %Severe health risks result from contact or ingestion of water that contains fecal matter due to pathogens present and the presence of fecal coliform bacteria can cause the 
@@ -38,17 +38,114 @@ Since the researchers know the \spec{} of the \isols{} in the library, they can 
 The methods used to compare \isols{} and make assertions depends entirely upon the \fib{}, their method of collection, and their digital representation.
 
 Library-based \mst{} is usually only effective within the region in which the known\spec{} \isols{} came from, making it difficult to build a ``one size fits all'' library.
-Companies exist that can, for a fee, attempt to determine the \spec{} of a provided sample.
+Companies exist that can, for fees in the ballpark of \$100, attempt to determine the \spec{} of a provided sample.
 While these companies exist nationwide, they are few in number and usually cannot build a representative sample every region for an accurate determination.
 Additionally, when investigating an incident of fecal contamination, investigators want to send out multiple samples to build reliable evidence for a determination of the source.
 As a result, the cost of outsourcing becomes too prohibitive and determinations too inaccurate for it to be an option.
 Thus, there exists a need for a cost-effective and accurate method of \mst{} in order to properly tackle the problem of preventing fecal contamination in water supplies.
 
 %%%% BACKGROUND: CPLOP
+In 2009, the \cplong{} (\cp{}) Biology and Computer Science Departments built \cploplong{} (\cplop{}) \cite{soliman2013cplop}, a database of \ecolilong{} (\ecoli{}) \isol{} fingerprints, called \pyros{}.
+Students collect fecal samples from a variety of \spec{} from the \slo{} area and build the \pyros{} using a low cost \dna{} sequencing method called pyrosequencing on two intergenic regions of an \ecoli{} \isol{}.
+Building \pyros{} ends up costing roughly two orders of magnitude less than outsourcing samples.
+It is through \cplop{} that \cp{} researchers hope to better understand bacterial strains, how to differentiate between them, and provide a cost-effective \mst{} method.
 
+\ITSlongs{} (\itsshort{}) in bacteria are regions of \dna{} that do not contain instruction for building proteins and thus have high variability, since variability across generations of bacteria does not affect the survivability of the microbe.
+Because of this high variability, researchers can use these regions to differentiate between strains of the same species of microbe.
+\ecoli{} \isol{} \pyros{} stored in \cplop{} represent the \pcrlong{} (\pcr{})-amplified regions of \dna{} between the \Gsixt{} and \Gtwen{} genes and \Gtwen{} and \Gfive{} genes, referred to as \Ssixt{} and \Sfive{} respectively.
+\Ssixt{} and \Sfive{}, along with the entire \ecoli{} genome, repeats seven times, giving us seven highly variable regions for each \itsshort{}.
+Any offspring inherit the \itsshort{} regions of the parent microbe, encoding the notion of a ``group'' or ``family'' and allowing researchers to use them to differentiate between strains \cite{SolimanDVMBNWKG12}.
+By building \pyros{} out of these regions, \cplop{} researchers hope to gain a rigorous notion of an \ecoli{} strain that they can use for \mst{}.
+
+A \pyro{} is a vector comprised of the peak heights of pyrosequences of multiple copies of a repeated region of \dna{}.
+By dispensing a series of nucleotides at specific times and observing the resulting light emitted, \cplop{} researchers can build a fingerprint of that \dna{} sequence.
+In traditional pyrosequencing, the \dna{} sequenced is an amplified version sequence of \dna{}, allowing researchers to reconstruct the exact sequence of nucleotides that make up the \dna{}.
+Since \cplop{} researchers \pyro{} segments of \dna{} that repeat but are highly variable, researchers cannot reconstruct the exact sequences of the \itsshort{} sequences.
+Alternatively, \cplop{} contains a \pyro{} that represents the random variability in the entire genome of that particular \ecoli{} \isol{}.
+Previous work in \cite{Shealy:SeniorProject} optimized the \pyro{}ing process, including the dispensation sequence and peak height determination, for each \itsshort{} to best delineate between different strains of \ecoli{} using the \pearson{} to compare \pyros{}.
+
+The \pearson{} normalizes the covariance of two vectors by the standard deviation of each, providing a notion of relative co-variability between the vectors that remains invariant of noise and scaling, which is why \cplop{} researchers use it to compare \pyros{}.
+In order to compare two \ecoli{} \isols{} in \cplop{}, researchers must separately compare the \Gsixt{} \pyros{} to each other and the \Gfive{} \pyros{} to each other using \pearson{}.
+It is meaningless to compare different \itsshort{} to each other since they represent entirely different sections of \dna{} that have been obtained through a different sequence of dispensations.
+This effectively gives us two comparison metrics between \isols{}: the \pearson{} between two \Gsixt{} and the \pearson{} \pyros{} between two \Gfive{} \pyros{}.
+Using these values, \cplop{} researchers can rigorously define the notion of a strain.
 
 %%%% BACKGROUND: RELATED CPLOP
+\cplop{} support numerous research projects, ranging from longitudinal studies of a \host{}, to large studies of a \spec{}, in order to understand the evolution and transmission of \ecoli{} strains and verify that \pyro{}ing provide an accurate representation of \ecoli{} strains.
+Previous work on \cplop{} include formation and validation of the \pyro{}ing process, exploration of the evolution and transference of \ecoli{} strains within and between \host{} and \spec{}, to new algorithms designed specifically for \cplop{} to better understand its data.
+
 %%%% BACKGROUND: kNN CLASSIFICATION
-%%%% METHOD: kNN REGION RESOLUTION
+While the original purpose of \cplop{} was to support \mst{} and some manual \mst{} studies have been conducted, little research has been done on building an automated \mst{} method.
+Most studies performed with \cplop{} focused on validating and exploring the various biological features captured by the \pyro{}ing process and the comparison metric used to compare \pyros{}, the \pearson{}.
+Building objective classification metrics that use the data in \cplop{} to assist \mst{} can help biologists inform investigators of a possible source that caused, or is causing, fecal contamination.
+
+
+As a first step towards building an effective classification technique, we chose to use the \kNNlong{} (\kNN) classification algorithm on \cplop{} to measure how accurately we can classify samples that we know the \spec{} of.
+\kNN{} classifies an unknown-class datum by querying a library of known data --- each datum has a class, or classification --- for ``nearby'' data; sorts the list by nearness, limiting it to \k{} many ``neighbor'' data points; and classifies from this ``\knnlong{}'' list by picking the most plural classification present among the neighbors, breaking ties usually by average position.
+
+A somewhat unique obstacle arises with the \ecoli{} \isols{} in \cplop{}: in order to compare \isols{}, we must use two different comparison metrics --- \pearson{} for \Ssixt{} and \pearson{} for \Sfive{}.
+For \kNN{} on \cplop{} \ecoli{} \isols{}, this means that we produce two \knnlong{} lists that we must classify from.
+Resolving multiple \kNN{} lists can be useful for any data that has multiple meaningful-yet-exclusive ways to compare one datum to another.
+Biologists using \kNN{} will likely want to restrict the list further than \k{}, since their definition of a strain relies heavily on bounding the \pearson{} between two \isols{} for both \itsshort{} --- so we also add an \a{} threshold to further limit the involved \kNN{} lists.
+
+%%%% METHOD: kNN RESOLUTION
+The four resolution algorithms, called the \krapmed{} (\krap{}) and previously published in \cite{DBLP:conf/bibm/McGovernDKBVG15}, are termed: \rmean{}, \rwinner{}, \runion{}, and \rintersect{}.
+\rmean{} takes the average of the comparison metrics to form a single \kNN{} list.
+\rwinner{} finds the most plural classification in each \kNN{} list and picks the classification with the most instances of that class in its list.
+\runion{} combines each \kNN{} list into a single set --- performing effectively a union on all of the \kNN{} lists --- and finds the most plural classification in the resulting set, breaking ties by average original position.
+\rintersect{} forms a new set that is exactly the \isols{} that appear in every \kNN{} list --- effectively performing an intersection at the \isol{} level --- expanding both lists and adding to the set until the set itself is of size \k{} and choosing the most plural class of the new set.
+
 %%%% METHOD: CLUSTERING
-%%%% CONCLUSION
+Much of the work done so far using \cplop{} has been exploring the composition, evolution, and transference of strains among \hosts{} and \spec{}.
+While part of this is to validate the \mst{} methodology that leverages \cplop{} data, researchers gain a large amount of insight into how \ecoli{} gets into and evolves in fecal matter by using \pyros{} to rigorously study changes.
+Clustering methods become very useful in this case, owing its effectiveness to the notion of a strain being similar to a ``group'' or ``family'' of a closely related subtype of a species of microbe.
+
+Two pieces of previous work, \cite{montana2013ontological, montana2013algorithms} and \cite{johnson2015density}, worked toward building meaningful clustering algorithms that can provide meaningful insight into the \ecoli{} \isols{} in \cplop{}.
+The former, \ohclust{}, is an agglomerative clustering algorithm guided by metadata provided by biologists.
+The latter, by Eric Johnson, is a density-based clustering algorithm --- \dbscan{} --- optimized by a fast range query for nearby \isols{}.
+
+While \ohclust{} takes advantage of all of the information available in \cplop{}, \dbscan{} encodes our notion of a strain the closest and allows for strain discovery without needing to guess what ontology provides the best insight.
+Moreover, the range query optimizations made in \cite{johnson2015density} allow for efficient, low-memory querying of \isols{} while still encoding the notion of \pearson{} between \isols{}, an improvement over \ohclust{}'s need to precompute and store distances in order to mitigate the consequences of agglomerative clustering's need for a high number of distance computations.
+It is also possible that by preclustering \isols{}, we can speed up the computation of \krap{}.
+
+In a nutshell, \dbscan{} uses a distance metric, a minimum neighbors value \minneigh{}, and an \eps{} range to categorize data points as one of three types: core point, border point, or noise.
+A core point is a point that has at least \minneigh{} data points within \eps{} of it. 
+A border point is a point that is within \eps{} of a core point, but that does not have \minneigh{} points within \eps{} of it. Every other point is noise. 
+A cluster is a group of neighboring core points with their associated border points.
+%According to this definition of a cluster, all clusters must have at least \minneigh{} points in them.
+
+%%%% CONCLUSION: kNN RESOLUTION
+Investigating \krap{} in \cite{DBLP:conf/bibm/McGovernDKBVG15} showed us that classification accuracy for the entire database stayed well above 50\% with most of the resolution algorithms.
+Precision and recall for well-represented \spec{} also stayed safely above 0.30, which is far better than random and notably better than our outsourced baseline.
+Underrepresented species predictably performed poorly in classification.
+\a{} thresholding noticeably improved performance on some resolution algorithms, causing one to perform better than the others with \a{}, but worse without.
+
+%%%% CONCLUSION: CLUSTERING
+In \cite{DBLP:conf/bcb/McGovernJDBKV16}, we constructed the notion of a bacterial strain purely from the clusters produced by \dbscan{} --- i.e. we defined bacterial strains as clusters produced by \dbscan{}.
+We studied the cluster purity --- the proportion of \isols{} in a cluster that are of the same species --- of the entire clustering at different \minneigh{} values.
+In doing so, we confirmed the presence of so-called transient \ecoli{} strains --- strains of \ecoli{} that show up in many different \spec{} --- that tend to confound \mst{}.
+More importantly, it showed that \cplop{} has relatively few transient strains and a large number of pure strains.
+
+%%%% SNEAK PEEK
+
+In this thesis, we investigate further the work done in \cite{DBLP:conf/bibm/McGovernDKBVG15} and \cite{DBLP:conf/bcb/McGovernJDBKV16} in depth and determine whether combining the two is useful to performing \mst{}.
+Namely, the contributions of this paper are the following:
+\begin{itemize}
+    \item \krapmed{}: Modifications to the \kNN{} classification algorithm that can resolve multiple comparison metrics
+    \item A modification to \kNN{} that adds \a{} thresholding to further restrict the individual \kNN{} lists
+    \item An empirical study measuring the accuracy of identifying the \spec{} for the \ecoli{} \isols{} stored in \cplop{}, investigating how values of \k{} and \a{} affect the accuracy with each resolution metric
+    \item Revisions to work done in \cite{DBLP:conf/bibm/McGovernDKBVG15}
+    \item An investigation of the efficient density-based clustering algorithm in \cite{johnson2015density} that is scalable and meaningfully encodes the comparison-metric used in \cplop{}
+    \item A set of validation measures for clustering bacterial \isols{} into strains
+    \item An evaluation of our strain discovery procedure based on the defined set of measures
+\end{itemize}
+
+The rest of this thesis is organized as follows:
+\autoref{chap:related-work} provides an overview of relevant work in the field of \mst{} and an overview of certain work done with \cplop{};
+\autoref{chap:background} details \cplop{} and the background necessary to understand the algorithms presented;
+\autoref{chap:methodology} describes \krap{} and the \dbscan{} clustering for bacterial strains;
+\autoref{chap:implementation} gives an overview of the structure of the code and how to use it;
+\autoref{chap:evaluation} defines the evaluation criteria that the algorithms are judged by and motivation for their use;
+\autoref{chap:results} discusses the results of the investigation;
+and
+\autoref{chap:conclusion} concludes, offering suggestions for future work.
