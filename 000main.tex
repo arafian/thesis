@@ -5,6 +5,22 @@
 \usepackage{amssymb}
 \usepackage{mathrsfs}
 
+% CUSTOM THEOREM ENVIRONMENTS
+\usepackage{amsthm}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{theorem}{Theorem}
+
+\theoremstyle{definition}
+\newtheorem{principle}{Principle}[section]
+
+% Pilfered from: http://tex.stackexchange.com/questions/108336/horizontal-spaces-to-the-left-and-right-of-theorems
+\usepackage{etoolbox}
+\usepackage{changepage}
+\BeforeBeginEnvironment{principle}{\vspace{-4\parskip}\begin{adjustwidth}{\parindent}{\parindent}}
+\AfterEndEnvironment{principle}{\end{adjustwidth}}
+
+
 % FORMAT UTILITIES
 \usepackage{indentfirst}
 \usepackage[letterpaper]{geometry}
@@ -14,6 +30,7 @@
 \usepackage[hyphens]{url}
 \usepackage{listings}
 \usepackage[]{algorithm2e}
+\usepackage{setspace}
 
 % FLOAT UTILITIES
 \usepackage{longtable}
@@ -39,7 +56,6 @@
 
 % DOCUMENT UTILITIES
 \usepackage{appendix}
-\usepackage{cleveref}
 \usepackage{titlesec}
 \usepackage{ifthen}
 
@@ -98,9 +114,12 @@
 \makeatother   % Cancel the effect of \makeatletter
 % ---------------------------------------
 
+% STUPID SHIT THAT NEEDS TO BE LOADED LAST
+\usepackage{cleveref}
 % Define Appendix refs
 \crefname{app}{appendix}{appendices}
 \Crefname{app}{Appendix}{Appendices}
+
 
 %%%%%%%%%% BEGIN %%%%%%%%%%
 \begin{document}

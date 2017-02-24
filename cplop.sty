@@ -1,4 +1,5 @@
 % MACROS
+
 \newcommand{\N}{\ensuremath{\mathbb{N}}}
 \newcommand{\R}{\ensuremath{\mathbb{R}}}
 \newcommand{\C}{\ensuremath{C}}
@@ -12,6 +13,16 @@
 \newcommand{\hosts}{host-animals}
 \newcommand{\isols}{isolates}
 \newcommand{\pyros}{pyroprints}
+
+\newcommand{\isola}{\Isol{} $A$}
+\newcommand{\isolasixt}{\ifmmode \text{\Ssixt{}}_A \else \Ssixt{}$_A$\fi}
+\newcommand{\isolafive}{\ifmmode \text{\Sfive{}}_A \else \Sfive{}$_A$\fi}
+\newcommand{\isolb}{\Isol{} $B$}
+\newcommand{\isolbsixt}{\ifmmode \text{\Ssixt{}}_B \else \Ssixt{}$_B$\fi}
+\newcommand{\isolbfive}{\ifmmode \text{\Sfive{}}_B \else \Sfive{}$_B$\fi}
+\newcommand{\pcisolsixt}{$\pcfunclabel(\isolasixt{},\isolbsixt{})$}
+\newcommand{\pcisolfive}{$\pcfunclabel(\isolafive{},\isolbfive{})$}
+\newcommand{\isolsep}{2}
 
 \newcommand{\Spec}{Host-Species}
 \newcommand{\Host}{Host-Animal}
@@ -51,15 +62,14 @@
 \newcommand{\Gtwen}{\textit{23S}}
 \newcommand{\Gfive}{\textit{5S}}
 
-%\newcommand{\Ssixt}{\textit{16S-23S}}
-%\newcommand{\Sfive}{\textit{23S-5S}}
-
-\newcommand{\Ssixt}{\its{1}}
-\newcommand{\Sfive}{\its{2}}
-\newcommand{\itsone}{\Ssixt}
-\newcommand{\itstwo}{\Sfive}
-\newcommand{\Ssixtdims}{95}
-\newcommand{\Sfivedims}{93}
+\newcommand{\Ssixtname}{\textit{16S-23S}}
+\newcommand{\Sfivename}{\textit{23S-5S}}
+\newcommand{\Ssixt}{\itsone}
+\newcommand{\Sfive}{\itstwo}
+\newcommand{\itsone}{\its{1}}
+\newcommand{\itstwo}{\its{2}}
+\newcommand{\Ssixtdims}{96}
+\newcommand{\Sfivedims}{94}
 
 \newcommand{\ecoli}{\textit{E. coli}}
 \newcommand{\ecolilong}{\textit{Escherichia coli}}
@@ -101,6 +111,8 @@
 
 \newcommand{\dna}{DNA}
 \newcommand{\rna}{RNA}
+\newcommand{\rrna}{rDNA}
+\newcommand{\rrnalong}{ribosomal RNA operon}
 
 \newcommand{\mst}{MST}
 \newcommand{\mstlong}{microbial source tracking}
@@ -125,13 +137,16 @@
 \newcommand{\Pearsons}{Pearson Correlation Coefficients}
 \newcommand{\pearson}{Pearson correlation coefficient}
 \newcommand{\pearsons}{Pearson correlation coefficients}
+\newcommand{\pcshort}{\pcfunclabel{}}
 \newcommand{\pcfunclabel}{\ensuremath{\rho}}
 \newcommand{\pcfuncdomain}{\ensuremath{\R^n\times\R^n}}
 \newcommand{\pcfunccodomain}{\ensuremath{[0,1]\subset\R}}
 \newcommand{\pca}{\ensuremath{x}}
 \newcommand{\pcb}{\ensuremath{y}}
 \newcommand{\pcveca}{\ensuremath{\vec{\pca}}}
+\newcommand{\pcvecaa}{\ensuremath{\vec{\pca}\,'}}
 \newcommand{\pcvecb}{\ensuremath{\vec{\pcb}}}
+\newcommand{\fullvec}[2]{\ensuremath{(#1_1,\dots,#1_#2)}}
 \newcommand{\pcfuncdef}{\ensuremath{\pcfunclabel{}: \pcfuncdomain{}\rightarrow\pcfunccodomain{}}}
 
 \newcommand{\pcfunc}[2]{\ensuremath{\pcfunclabel{}(\vec{#1}, \vec{#2})}}
@@ -139,8 +154,10 @@
 \newcommand{\vecdef}[1]{\ensuremath{\vecdeflast{#1}{n}}}
 %\newcommand{\vecavg}[1]{\ensuremath{E(\vec{#1})}}
 \newcommand{\vecavg}[1]{\ensuremath{\mu_{\vec{#1}}}}
-\newcommand{\vecstddev}[1]{\ensuremath{\sigma_{\vec{#1}}}}
-\newcommand{\veccov}[2]{\ensuremath{\mathit{cov}(\vec{#1}, \vec{#2})}}
+\newcommand{\stddev}[1]{\ensuremath{\sigma_{#1}}}
+\newcommand{\vecstddev}[1]{\ensuremath{\stddev{\vec{#1}}}}
+\newcommand{\cov}[2]{\ensuremath{\mathit{cov}(#1, #2)}}
+\newcommand{\veccov}[2]{\ensuremath{\cov{\vec{#1}}{\vec{#2}}}}
 
 \newcommand{\pcsixt}{$\pcfunclabel{}_{\text{\Ssixt{}}}$}
 \newcommand{\pcfive}{$\pcfunclabel{}_{\text{\Sfive{}}}$}
@@ -156,6 +173,16 @@
 \newcommand{\pceric}[2]{
 \ensuremath{
 \frac{1}{\numdims{}}\sum_{i=1}^\numdims{}\frac{(#1_i - \vecavg{#1})(#2_i - \vecavg{#2})}{\vecstddev{#1}\cdot \vecstddev{#2}}
+}
+}
+\newcommand{\covfull}[2]{
+\ensuremath{
+\frac{1}{\numdims{}}\sum_{i=1}^\numdims{}(#1_i - \vecavg{#1})(#2_i - \vecavg{#2})
+}
+}
+\newcommand{\stddevfull}[1]{
+\ensuremath{
+\sqrt{\frac{1}{\numdims{}}\sum_{i=1}^\numdims{}(#1_i - \vecavg{#1})^2}
 }
 }
 \newcommand{\zscorefn}{\ensuremath{\mathit{z}}}
