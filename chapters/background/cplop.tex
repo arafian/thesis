@@ -84,7 +84,7 @@ Traditional pyrosequencing allows researchers to figure out the sequence of nucl
 As a result, \cplop{} researchers cannot use a \pyro{} to figure out the nucleotide sequence of the \pyro{}ed \itsshort{} region.
 
 %%%%% ISOLATES %%%%%
-\subsection{Obtaining \ecolilong{} \Isols{}}
+\subsection{Obtaining \& Comparing \ecolilong{} \Isols{}}
 \cp{} students collect \ecolilong{} (\ecoli{}) \isols{} from the fecals samples of a variety of different sources for a multitude of different studies.
 Sources include a variety of \spec{}, including humans, as well as environmental sources for \mst{} studies.
 Culturing and \ecoli{} extraction occurs in an introductory cell and molecular biology class.
@@ -178,7 +178,7 @@ Peak intensity differences and noise from the machine are accounted for by \pear
 
 The nature of separately \pyro{} the \Ssixt{} and \Sfive{} regions of an \isol{} requires adherence to the following principle:
 
-\begin{principle}[Comparing \Isols{}\index{Principle of Comparing \Isols{}}]
+\begin{principle}[Comparing \Isols{}\index{Principle of Comparing \Isols{}}]\label{principle:comparing-isolates}
 The only valid comparison between \isols{} using the \pearson{} \pcfunclabel{} is a separate comparison of the \Ssixt{} \pyros{} using \pcfunclabel{} and \Sfive{} \pyros{} using \pcfunclabel{}:
 Given two isolates \isola{} and \isolb{}, where 
 \isola{} has \pyros{} \isolasixt{} and \isolafive{}
@@ -236,39 +236,19 @@ It stores metadata for each collected sample, including who collected it and whe
 Importantly, the name of the \spec{} and a unique designation for the \host{} marks the sample that the \pyros{} of an \isol{} came from.
 For computationally intense 
 
-The web frontend, written in \php{}, allows \cplop{} to access the information in the database from the Internet to: perform queries for \isols{} and \pyros{}, browse \isol{} and \pyro{} datasets, and perform forensic matching.
+The web frontend, written in \php{}, allows \cplop{} to access the information in the database from the Internet to: perform queries for \isols{} and \pyros{}, browse \isol{} and \pyro{} datasets, and perform forensic matching. 
 The \isols{} in \cplop{} are visible from this interface (see \autoref{fig:browse-isolates}) as are the \pyros{} (\autoref{fig:browse-pyroprints}).
-\begin{figure}
-    \centering
-    \subfloat[Browse \Isols{}]{\includegraphics[width=\frontendwidth]{figures/frontend/browse-isolates}\label{fig:browse-isolates}}
-    \\
-    \subfloat[]{\includegraphics[width=\frontendwidth]{figures/frontend/browse-pyroprints}\label{fig:browse-pyroprints}}
-    \caption{\cplop{} allows researchers to explore its \isols{} \protect\subref{fig:browse-isolates} and \pyros{} \protect\subref{fig:browse-pyroprints}.}
-    \label{fig:browse}
-\end{figure}
+\input{figures/frontend/browse}
 \Isols{} may have multiple \pyros{}, which the \cplop{} frontend allows researchers to browse, which \autoref{fig:browse-isolate-pyroprints} shows.
-\begin{figure}
-    \centering
-    \includegraphics[width=\frontendwidth]{figures/frontend/browse-isolate-pyroprints}
-    \caption{The \cplop{} frontend allows researchers to browse the \pyros{} of an \isol{}.}
-    \label{fig:browse-isolate-pyroprints}
-\end{figure}
+\input{figures/frontend/browse-isolate-pyroprints}
 Certain \isols{} come from particular collection runs, be they certain studies or classroom examples, and appear collectively as datasets on the website.
-\begin{figure}
-    \centering
-    \includegraphics[width=\frontendwidth]{figures/frontend/browse-isolate-datasets}
-    \caption{Certain \isols{} may be part of a collection of \isols{}, which \cplop{} has the ability to sort by.}
-    \label{fig:browse-isolate-datasets}
-\end{figure}
+\input{figures/frontend/browse-isolate-datasets}
 \cplop{} also provides the ability to view the \pyro{} histogram, as \autoref{fig:pyroprint-histogram} shows.
-\begin{figure}
-    \centering
-    \includegraphics[width=\frontendwidth]{figures/frontend/pyroprint-histogram}
-    \caption{Researchers can use \cplop{} to view the histogram of an individual \pyro{}.}
-    \label{fig:pyroprint-histogram}
-\end{figure}
-
+\input{figures/frontend/pyroprint-histogram}
+Forensic matching (\autoref{fig:forensic}) is a crucial feature of \cplop{}, allowing researchers to query a dataset against the \cplop{} database to find matching \isols{}.
+\input{figures/frontend/forensic}
 
 \cp{} servers host the \cplop{} website at \url{http://cplop.cosam.calpoly.edu/}.
 The servers are limited in computational ability, only containing \gb{4} of \ram{}.
 Such limitations make it difficult to implement algorithms like \ohclust{} \cite{montana2013algorithms, montana2013ontological, montana2012investigating}, which require more than \gb{4} of \ram{} for efficient computation, or \cite{adams2016using}, which requires access to a cluster of computers for \mapreduce{} ability.
+Future work will assess the feasibility of moving over to more dynamic systems, like \awslong{}.
