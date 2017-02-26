@@ -38,10 +38,14 @@
 \usepackage[morefloats=125]{morefloats}
 \usepackage{morefloats}
 \usepackage{float}
-%\usepackage{subfig}
-%\usepackage{subcaption}
+\usepackage[caption=false]{subfig}
+%\usepackage{caption}
+%\usepackage[caption=false]{subcaption}
 \usepackage{wrapfig}
 \usepackage{makecell}
+\makeatletter
+\let\@currsize\normalsize
+\makeatother
 
 % VISUAL UTILITIES
 \usepackage{graphicx}
@@ -119,6 +123,8 @@
 % Define Appendix refs
 \crefname{app}{appendix}{appendices}
 \Crefname{app}{Appendix}{Appendices}
+\newcommand{\subfigureautorefname}{\figureautorefname}
+\renewcommand{\thesubfigure}{\alph{subfigure}}
 
 
 %%%%%%%%%% BEGIN %%%%%%%%%%

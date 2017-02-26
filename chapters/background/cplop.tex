@@ -207,7 +207,8 @@ Comparing an \Ssixt{} \pyro{} to an \Sfive{} \pyro{} with \pcfunclabel{} is comp
     \label{fig:isolcompare}
 \end{figure}
 
-Defining strains using \pearson{} requires a similarity threshold, above which we may consider two \isols{} to be part of the same strain.
+Defining strains using the \pearson{} requires a similarity threshold, above which we may consider two \isols{} to be part of the same strain.
+\index{defining strains}
 Two \isols{} are considered to be of the same strain if the \pyros{} of both regions have a $  > \a{}$, where $\a{} = 0.990$ \cite{Shealy:SeniorProject, Black2014121}.
 \index{\a{}}
 Work done in \cite{Shealy:SeniorProject} determined this \a{} threshold by simulating the \pyro{}ing process with tools from \cite{montana2013algorithms} on known \ecoli{} strains from the \ncbilong{} database.
@@ -215,3 +216,59 @@ Simulations performed in \cite{DBLP:conf/bibm/BrandtMSBGK12} further confirmed t
 
 %%%%% DATABASE %%%%%
 \subsection{Database}
+There are three pieces that comprise \cplop{}: the physical cold storage of fecal samples and \isols{}, the backend data store, and the frontend web interface.
+Cold storage allows \cplop{} researchers to perform 
+The backend data store holds the \pyros{} and metadata about their \spec{} and collection.
+The web interface, shown in \autoref{fig:front-page}, allows researchers to perform queries and test whether \isols{} match.
+\begin{figure}
+    \centering
+    \includegraphics[width=\frontendwidth]{figures/frontend/front-page}
+    \caption{Researchers use \cplop{} through a web-accessible frontend.}
+    \label{fig:front-page}
+\end{figure}
+
+Cold storage holds the collected fecal samples and the \isols{} cultured from them.
+It allows \cplop{} researchers to culture additional \isols{} and re-\pyro{} existing \isols{}.
+Often, researchers refer to the cold storage as the ``library'' in library-based \mst{}.
+
+The data store for \cplop{} \pyros{} is a \mysql{} database.
+It stores metadata for each collected sample, including who collected it and where and when they collected it.
+Importantly, the name of the \spec{} and a unique designation for the \host{} marks the sample that the \pyros{} of an \isol{} came from.
+For computationally intense 
+
+The web frontend, written in \php{}, allows \cplop{} to access the information in the database from the Internet to: perform queries for \isols{} and \pyros{}, browse \isol{} and \pyro{} datasets, and perform forensic matching.
+The \isols{} in \cplop{} are visible from this interface (see \autoref{fig:browse-isolates}) as are the \pyros{} (\autoref{fig:browse-pyroprints}).
+\begin{figure}
+    \centering
+    \subfloat[Browse \Isols{}]{\includegraphics[width=\frontendwidth]{figures/frontend/browse-isolates}\label{fig:browse-isolates}}
+    \\
+    \subfloat[]{\includegraphics[width=\frontendwidth]{figures/frontend/browse-pyroprints}\label{fig:browse-pyroprints}}
+    \caption{\cplop{} allows researchers to explore its \isols{} \protect\subref{fig:browse-isolates} and \pyros{} \protect\subref{fig:browse-pyroprints}.}
+    \label{fig:browse}
+\end{figure}
+\Isols{} may have multiple \pyros{}, which the \cplop{} frontend allows researchers to browse, which \autoref{fig:browse-isolate-pyroprints} shows.
+\begin{figure}
+    \centering
+    \includegraphics[width=\frontendwidth]{figures/frontend/browse-isolate-pyroprints}
+    \caption{The \cplop{} frontend allows researchers to browse the \pyros{} of an \isol{}.}
+    \label{fig:browse-isolate-pyroprints}
+\end{figure}
+Certain \isols{} come from particular collection runs, be they certain studies or classroom examples, and appear collectively as datasets on the website.
+\begin{figure}
+    \centering
+    \includegraphics[width=\frontendwidth]{figures/frontend/browse-isolate-datasets}
+    \caption{Certain \isols{} may be part of a collection of \isols{}, which \cplop{} has the ability to sort by.}
+    \label{fig:browse-isolate-datasets}
+\end{figure}
+\cplop{} also provides the ability to view the \pyro{} histogram, as \autoref{fig:pyroprint-histogram} shows.
+\begin{figure}
+    \centering
+    \includegraphics[width=\frontendwidth]{figures/frontend/pyroprint-histogram}
+    \caption{Researchers can use \cplop{} to view the histogram of an individual \pyro{}.}
+    \label{fig:pyroprint-histogram}
+\end{figure}
+
+
+\cp{} servers host the \cplop{} website at \url{http://cplop.cosam.calpoly.edu/}.
+The servers are limited in computational ability, only containing \gb{4} of \ram{}.
+Such limitations make it difficult to implement algorithms like \ohclust{} \cite{montana2013algorithms, montana2013ontological, montana2012investigating}, which require more than \gb{4} of \ram{} for efficient computation, or \cite{adams2016using}, which requires access to a cluster of computers for \mapreduce{} ability.
