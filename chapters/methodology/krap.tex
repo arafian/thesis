@@ -1,0 +1,71 @@
+\section{\krap{}}\label{sec:krap}
+
+In order to accommodate these separate similarity metrics, we need a resolution procedure.
+Rather than creating a new similarity metric out of a pair of similarity scores, we choose to update the \kNN{} method with four different ways of selecting the resultant category label based on how the pyroprints compare to each other. 
+These four methods are described below.
+
+In what follows, we generalize our problem. Given \UNKNOWN{} and \KNOWN{}, two library objects (\isols{}), and a collection of \compfuncs{}, \COMP{}$=(\COMP{}_1,\ldots \COMP{}_m)$, with $m > 1$, comparing \UNKNOWN{} to \KNOWN{} gives us a collection of values:  
+$\COMP{}(\UNKNOWN{},\KNOWN{}) = (\COMP{}_1(\UNKNOWN{},\KNOWN{}),\ldots,\COMP{}_m(\UNKNOWN{},\KNOWN{}))$.
+All four resolution procedures described in this section work with such a generalized representation of \isols{} and \compfuncs{} between them.
+
+Given an unknown \isol{} \UNKNOWN{}, a library of classified\footnote{A ``classified \isol{}'' is an \isol{} for which the \spec{} has been identified in the database.} \isols{} \LIB{}, and a set of \compfuncs{} \COMP{}, we compare \UNKNOWN{} to each object in \LIB{} using each \compfunc{} in \COMP{}. To resolve these \compfuncs{}, we propose four algorithms:
+
+\subsection{Comparing \Isols{}}
+Of primary interest to the biologists using \cplop{} is comparing \isols{} to each other. In \cplop{}, each \isol{} is represented by a pair of mutually incomparable \pyros{}: one for each of the two \itsshort{} regions.
+As a result, given \isols{} $I_1, I_2$, we can represent each as a pair of pyroprint vectors 
+\[I_1 = (\vec{q}_1, \vec{q}_2) \text{ and } I_2 = (\vec{r}_1, \vec{r}_2),
+\]
+where $\vec{q}_1 \text{ and } \vec{r}_1$ are respectively $I_1 \text{ and } I_2$'s \Ssixt{} \pyro{} and $\vec{q}_2 \text{ and } \vec{r}_2$ are respectively $I_1 \text{ and } I_2$'s \Sfive{} \pyro{} \cite{Black2014121}. Since \pyro{}s from different regions are incomparable, comparing \isol{}s must be done as follows:
+\[
+\COMP{}(I_1, I_2) = (\pcfunclabel(\vec{q}_1, \vec{r}_1), \pcfunclabel(\vec{q}_2, \vec{r}_2)),
+\]
+where $\pcfunclabel(\cdot,\cdot)$ is between \pyros{} of the same \itsshort{} region and is the \pearson{}. Thus, when comparing \isol{}s, we effectively have two different similarity metrics, one for each \itsshort{} region:
+\[
+\COMP{}(I_1, I_2) = (\COMPsixt{}(I_1, I_2), \COMPfive{}(I_1, I_2)).
+\]
+
+\input{algorithms/comparison}
+
+\subsection{\a{} Filtering}
+Our first modification to \kNN{} is an additional condition at step \ref{knn:filter}:
+\begin{enumerate}
+\setcounter{enumi}{3}
+\item Consider only the top $k$ entries in $N$ above threshold $\alpha$
+\end{enumerate}
+
+The $\alpha$ threshold allows biologists to filter out neighbors that are among the $k$ closest, but too dissimilar to compare. 
+When comparing multiple \pyro{}s of the same region of a single \isol{}, the Pearson Correlation between them is strictly above 0.99.
+As a result, for many other studies --- not necessarily MST-focused --- a Pearson Correlation of 0.99 or above is used to define a strain of \ecoli{}. 
+Filtering by some value near this may give more accurate results and provides an intuitive way to relate these lists to other studies.
+\input{algorithms/filter}
+
+\subsection{\rmean{}}
+For $U$ and a $P\in\LIB{}$, we take the mean of the result of all of the \compfuncs{} and build a single \knnlong{} list from it.
+The mean can be any metric mapping $\R^n\times\R^n\rightarrow\R$ and in the investigated implementation, we use the euclidean distance, also known as the $L^2$ norm.
+A single \knnlong{} list results from this algorithm that we filter by $k$ and $\alpha$ and use to classify the unknown.
+\autoref{alg:mean} describes this process in pseudocode.
+\input{algorithms/mean}
+
+\subsection{\rwinner{}}
+For each \compfunc{}, we make a \knnlong{} list and filter by $k$ and $\alpha$ accordingly.
+Once we finish building each \compfunc{}'s \knn{} list, we find the most plural classification from each list and track the number of times that classification shows up in that list.
+Then, we classify $u$ based off the classification that has the highest number in its corresponding list.
+\autoref{alg:winner} describes this process in pseudocode.
+\input{algorithms/winner}
+
+\subsection{\runion{}}
+For each \compfunc{}, we make a \knnlong{} list and filter by $k$ and $\alpha$ accordingly.
+After building each \knnlong{} list, we combine the lists into a set, keeping track of the original list position for tie-breaking.
+From this set, which we dub the union, we count the classifications present in the union and classify $u$ as the most plural in the union of the lists, compared to the other lists.
+\autoref{alg:union} describes this process in pseudocode.
+\input{algorithms/union}
+
+\subsection{\rintersect{}}
+For each \compfunc{}, we make a \knnlong{} list and filter by $k$ and $\alpha$ accordingly, but ensure that we do not lose track of the entire sorted list of results.
+After building each \knnlong{} list, we inspect each list for common \isol{}s.
+We add \isol{}s that appear in every list into a set that we call the intersection.
+If the size of the intersection is $k$, then we are done.
+Otherwise, we increase the length of our individual lists by $\delta$ and search for common \isol{}.
+This process repeats until the size of the intersection is $k$, or all of the \isol{}s in the individual lists are below threshold $\alpha$.
+\autoref{alg:intersection} describes this process in pseudocode.
+\input{algorithms/intersection}

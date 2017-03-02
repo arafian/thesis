@@ -1,0 +1,24 @@
+\begin{algorithm}[H]
+\caption{Isolate Comparison Metric}\label{alg:compare}
+\textit{Input}:
+    \begin{itemize}
+    \item $u\in\ISOL{}$: an \isol{}
+    \item $v\in\ISOL{}$: an \isol{}
+    \end{itemize}
+\textit{Output}:
+    \begin{itemize}
+    \item \R{} value, indicating similarity
+    \end{itemize}
+\textit{Requires}:
+    \begin{itemize}
+    \item Each \isol{} has a \pyro{} in the $i^{th}$ ITS region
+    \end{itemize}
+
+\begin{algorithmic}[1]
+\Procedure{$C_i(u,v)$}{}
+\State $\vec{p_u} \leftarrow$ \Call{GetPyroprint$_i$}{$u$}
+\State $\vec{p_v} \leftarrow$ \Call{GetPyroprint$_i$}{$v$}
+\State \Return \Call{PearsonCorrelation}{$\vec{p_u},\vec{p_v}$}
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}

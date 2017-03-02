@@ -1,1 +1,50 @@
 \chapter{Conclusion}\label{chap:conclusion}
+\section{Clustering \Isols{}}
+In order to combat the issue of contamination of publicly accessible water supplies, namely fecal contamination, the \cp{} Biological Sciences Department teamed up with the \cp{} Computer Science Department to build a library-based \mst{} method, called \cplop{}.
+Using the \ecoli{} isolated from fecal samples as \fiblong{}, \cp{} students pyrosequence the \pcr{}-amplified \itslong{} regions of the \ecoli{} and store the resulting vector, called a \pyro{}, in the \cplop{} database for later retrieval, analysis, and comparison.
+
+%In this paper, we propose an \isol{} classification technique using a clustering method that classifies an \isol{}'s \spec{} by clustering the known \isols{} in the library along with the \isol{} of interest, and classifying it as the most-plural \spec{} of the cluster it ends up in.
+
+
+%Additionally, we present a density-based clustering technique based off of \dbscan{} and optimized for the data in \cplop{} that scales.
+In this paper, we study the accuracy of a clustering-based MST approach which scales significantly better: the bacterial isolate information stored in \cplop{} is clustered using an efficient density-based clustering technique.
+It clusters data by taking two parameters --- the minimum number of neighbors and an \eps{} range that those neighbors must be within to form a cluster --- and performs range queries in a spatial index that performs \bigo{\log{n}} look-up on neighbors using a comparison metric.
+Compared to previous work \cite{DBLP:conf/bibm/McGovernDKBVG15, montana2013ontological}, it requires fewer comparisons to other \isols{} and computational resources, by being able to perform reasonably fast clusterings on a consumer laptop in minutes.
+
+To ascertain how well this technique classifies, we build a notion of cluster purity.
+By calculating the proportion of the entire cluster that the most-plural \spec{} makes up, we hope to understand how a density-based clustering algorithm clusters the \cplop{} data.
+%By inspecting the purity of a cluster, we hope to gain a sense of the likelihood that an \isol{} will be currently classified by our method.
+Furthermore, we inspect coverage and overall accuracy.
+
+Results are that we are able to cluster most of the \isols{} in \cplop{} with high accuracy. 
+Most clusters have high purity and low number of unique species, which is promising for using this for \mst{}.
+Transient strains are also visible in the clustering technique, which will further aid the biologists working on \cplop{} in researching transient strains and improving \mst{} techniques. 
+Future work will leverage other \mst{} techniques designed for \cplop{} against this to make up for the lack of coverage and transient strains.
+\section{\krap{} Effectiveness}
+%\subsection{Choosing $k$}
+Generally, when using \kNN{}, it is preferred to use single digit $k$ values. Through our investigation of these various \kNN{} classification algorithms, we find that that general advice holds true. For our dataset, using $k\geq5$ does not produce much different results. Choosing $k<5$ is a dangerous notion, since it is likely that an outlier may make its way into the \knn{} list, confounding the results. Staying with $5\leq k\leq9$ appears to be a safe and reasonable option, providing a good balance between accuracy and filtering of isolates.
+
+%\subsection{Choosing $\alpha$}
+Outside of this study, we choose to differentiate between strains of \ecoli{} using $\alpha=0.99$. It appears that using this value is advantageous. There were, however, some exceptions to those results, motivating us to consider non-thresholded \knn{} lists when classifying an unknown isolate.
+
+%\subsection{Choosing a Resolution Algorithm}
+The four resolution algorithms --- meanwise, winner, union, and intersection --- each have their own quirks and behaviors as we alter $k$ and $\alpha$. 
+
+Meanwise, which currently uses the Euclidean norm to resolve different metrics, did not respond to the $\alpha$ threshold and completely stopped classifying anything for $\alpha$ near 1. This is very likely due to Euclidean norm mapping $([0,1],\dots,[0,1])\rightarrow [0,\sqrt{1+\dots+1}]$. To get around this, we multiplied the resulting norm by a factor of $\sqrt2$, which may have unexpected results. We may investigate this further, or choose a more natural norming method, like arithmetic or geometric mean. With no $\alpha$ filtering, it performed third best with an overall 73.2\% classification accuracy.
+
+Winner performs worst, classifying accurately between 65\% and 68\% of the time. Some alterations to this algorithm may make it more reliable, such as only counting the species that appear in all lists.
+
+Unionwise performs very well. Without filtering the \knn{} lists by $\alpha$, we find that the unionwise method classifies best, with an overall accuracy of 76.4\%. However, once we add in $\alpha$ filtering, the unionwise does not improve, staying relatively close to 76\%. 
+
+Intersection performs best when we use $\alpha$. This is likely due to the ``list'' actually being a set of common isolates. Overall, without filtering, the accuracy was 74.7\%, 78\%, and 85.9\% for $\alpha = $0.00, 0.98, and 0.99 respectively. 
+
+Overall, we find that the intersection algorithm performs the best and recommend moving forward with it. While unionwise did perform well, it did not respond well to thresholding and still did not perform as well as the intersection algorithm overall. Meanwise and winner may be more useful with previously mentioned modifications and we may investigate these in the future.
+
+%The high performance of the intersection method is likely due to the fundamental structure and strain differentiation methods we use in CPLOP. Give the pyroprint of two \ecoli{} cultures, a Pearson Correlation within 0.99 defines a strain. Restricting $\alpha$ to values near this limit gave us better overall accuracy, since we get are allowed to search a wide distance around the \isol{} to find \isol{}s that mathch both regions, and we filter out \isol{} that are a different strain. While we find that resolution by intersection is a very good method, we will likely still use variations of the other methods to aid in classification.
+
+%\subsection{Species Representation}
+Poorly distributed representation of species and environmental incomparabilities are issues endemic to library-based MST. CPLOP has an overabundance of Cow and Human \isol{}s, and an underrepresentation of many of the species in the database. This dilutes the \knn{} list considerably for species like the Chicken and Cat. 
+
+Library population issues aside, environmental limitations are another concern for accuracy. Nearly every sample in the library comes from a 30 mile radius around Cal Poly, making the collected \pyro{}s potentially incomparable to \pyro{}s collected from a different region.
+
+%Interestingly, environment factors in in another way, which our data shows about Bats . Classifying Bats is highly accurate and may be due to their limited involvement in other species' environment and small size. Cows have a wide variety of \ecoli{} strains, which allows them to show up in many other species' \knn{} lists. Bats on the other hand only have 37 \isol{}s in CPLOP all from a single \host{}, yet manage to be above 95\%, regardless of the method. We hypothesize that this is due to their limited interaction and we may investigate further.

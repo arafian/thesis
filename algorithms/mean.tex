@@ -1,0 +1,36 @@
+\begin{algorithm}[H]
+\caption{\rmean}\label{alg:mean}
+
+\textit{Input}:
+\begin{itemize}
+\item $u\in\UNKN{}$: an unknown \isol{}
+\item $\LIB{}\subseteq\ISOL{}$: a library of known \isol{}s
+\end{itemize}
+\textit{Output}:
+\begin{itemize}
+\item \SPEC{} value, classifying the unknown \isol{} $u$
+\end{itemize}
+\textit{Requires}:
+\begin{itemize}
+\item $k$, $\alpha$, and the set of comparison metrics \COMP{} are predetermined
+\end{itemize}
+
+\begin{algorithmic}[1]
+\Procedure{ClassifyMean$(u,\LIB)$}{}
+\State$N \gets\emptyset$    \COMMENT[.6]{Make nearest neighbors list.}
+\For{$p\in\LIB$}            \COMMENT[.6]{For each library element:}
+\State$\AVG{}\gets\{\emptyset\}$    \COMMENT[.55]{Make empty set for results.}
+    \For{$C_i\in \COMP{}$}          \COMMENT[.55]{For each comparison metric:}
+    \State $sim\gets$ \Call{$C_i$}{$u,p$}   \COMMENT[.3]{Compare.}
+    \State \add{$sim$}{\AVG{}}              \COMMENT[.3]{Track result.}
+    \EndFor
+    \State $mean\gets $\Call{Mean}{\AVG{}}  \COMMENT[.47]{Mean the results.}
+    \State \add{$(mean,p)$}{$N$}          \COMMENT[.47]{Add mean to neighbors.}
+\EndFor
+\State \sort{$N$}{$sim$}      \COMMENT[.5]{Sort by most similar.}
+\State $N\gets$\Call{Filter$_{k,\alpha}$}{$N$} \COMMENT[.5]{Keep the nearest.}
+\State$s\gets$ \Call{FindMostPluralSpecies}{$M$}
+\State\Return $s$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}

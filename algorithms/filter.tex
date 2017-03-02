@@ -1,0 +1,28 @@
+\begin{algorithm}[H]
+\caption{\kNN{} with $\alpha$ Threshold}\label{alg:filter}
+\textit{Input}:
+    \begin{itemize}
+    \item $list$: sorted list
+    \end{itemize}
+\textit{Output}:
+    \begin{itemize}
+    \item $nearest$: the top $k$ elements above the threshold $\alpha$
+    \end{itemize}
+\textit{Requires}:
+    \begin{itemize}
+    \item $k$ and $\alpha$ are predetermined
+    \item each element in $list$ has a similarity field $sim$
+    \end{itemize}
+
+\begin{algorithmic}[1]
+\Procedure{Filter$_{k, \alpha}$}{$list$}
+\State $nearest\gets\emptyset$
+\State $i\gets0$
+\While{$i < k$ \textbf{and} $list[i].sim < \alpha$}
+\State \add{$list[i]$}{$nearest$}
+\State $i\gets i + 1$
+\EndWhile
+\State\Return{$nearest$}
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}

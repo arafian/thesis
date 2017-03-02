@@ -1,3 +1,22 @@
 \section{Computational}
 \subsection{Density-Based Clustering of \Isols{}}\label{sec:dbscan}
+
+
+Density-based clustering algorithms build clusters based on two parameters: the minimum number of neighbors, \minneigh{},  a point must have to be a core point of a cluster, and \eps{}, the 
+radius that those neighbors must be within. 
+These algorithms define clusters with respect to core points and border points --- points within \eps{} of a core point --- labeling everything else (singletons) as noise. 
+In the following section, we describe density-based clustering and summarize our modifications and optimizations of it for \cplop{}. In this section we provide a brief description
+of the density-based clustering algorithm we use to cluster \cplop{} \isols{} \cite{johnson2015density}.
 \subsection{\kNNlong{}}
+The \kNNlong{} classification algorithm (\kNN{}) is a straightforward algorithm to classify an unclassified object using a library. We use the concept of a \compfunc{} to formulate an idea of ``closeness.'' To outline the process:
+
+Given an unclassified object \UNKNOWN{}, a library of classified objects \LIB{}, and a \compfunc{}, \COMP{}:
+\begin{enumerate}
+\item Compare \UNKNOWN{} to each object in \LIB{} using \COMP{}
+\item Add the classified object and the result to a list of neighbors, $N$
+\item Sort $N$ by most similar
+\item Consider only the top $k$ entries in $N$, called the \knnlong{} \label{knn:filter}
+\item Classify \UNKNOWN{} as the \textit{most plural} classification in the \knnlong{} list
+\end{enumerate}
+
+The motivation is that the unclassified object must be ``close'' to some of the classified objects in our database, using an appropriate measure of closeness for the data. By choosing the ``most plural'' classification --- the classification that shows up the highest number of times ---  in the \knnlong{} we can, with some accuracy, classify our unknown object.

@@ -20,6 +20,26 @@
 \BeforeBeginEnvironment{principle}{\vspace{-4\parskip}\begin{adjustwidth}{\parindent}{\parindent}}
 \AfterEndEnvironment{principle}{\end{adjustwidth}}
 
+% ALGORITHM UTILITIES
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{listings}
+
+\newcommand{\add}[2]{\textbf{add} #1 \textbf{to} #2}
+\newcommand{\sort}[2]{\textbf{sort} #1 \textbf{by} #2}
+\algrenewcommand{\algorithmiccomment}[1]{\hskip3em$\rightarrow$ #1}
+\newcommand{\COMMENT}[2][.4]{\leavevmode\hfill\makebox[#1\linewidth][l]{/*~#2}*/}
+\algnewcommand\And{\textbf{and}}
+\renewcommand\listalgorithmname{LIST OF ALGORITHMS}
+
+\lstset{
+        language=C,
+        basicstyle=\ttfamily,
+        keywordstyle=\color{MidnightBlue}\ttfamily,
+        stringstyle=\color{Aquamarine}\ttfamily,
+        commentstyle=\color{purple}\ttfamily,
+        morecomment=[l][\color{magenta}]{\#}
+}
 
 % FORMAT UTILITIES
 \usepackage{indentfirst}
@@ -29,7 +49,7 @@
 \usepackage{enumerate}
 \usepackage[hyphens]{url}
 \usepackage{listings}
-\usepackage[]{algorithm2e}
+%\usepackage[]{algorithm2e}
 \usepackage{setspace}
 
 % FLOAT UTILITIES
@@ -38,8 +58,8 @@
 \usepackage[morefloats=125]{morefloats}
 \usepackage{morefloats}
 \usepackage{float}
-\usepackage[caption=false]{subfig}
-%\usepackage{caption}
+\usepackage[format=hang, hangindent=4pt, caption=false]{subfig}
+%\usepackage{caption} % Fucking caption is dumb
 %\usepackage[caption=false]{subcaption}
 \usepackage{wrapfig}
 \usepackage{makecell}
@@ -68,7 +88,7 @@
 \usepackage{imakeidx}
 \makeglossaries
 \makeindex[intoc]
-\usepackage[breaklinks=true,hidelinks,pdfusetitle,plainpages=false]{hyperref}
+\usepackage[breaklinks=true, hidelinks, pdfusetitle, plainpages=false, pdfencoding=auto, psdextra]{hyperref}
 \def\sectionautorefname{Section}
 \def\subsectionautorefname{Subsection}
 \def\chapterautorefname{Chapter}
@@ -125,7 +145,7 @@
 \Crefname{app}{Appendix}{Appendices}
 \newcommand{\subfigureautorefname}{\figureautorefname}
 \renewcommand{\thesubfigure}{\alph{subfigure}}
-
+\newcommand{\algorithmautorefname}{Algorithm}
 
 %%%%%%%%%% BEGIN %%%%%%%%%%
 \begin{document}
@@ -163,6 +183,9 @@
 
 %%% FIGURES
 \listoffigures
+
+%%% ALGORITHMS
+\listofalgorithms
 
 % Add CHAPTER into table of contents.
 \addtocontents{toc}{%

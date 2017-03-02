@@ -1,0 +1,37 @@
+\begin{algorithm}[H]
+\caption{\runion}\label{alg:union}
+
+\textit{Input}:
+\begin{itemize}
+\item $u\in\UNKN{}$: an unknown \isol{}
+\item $\LIB{}\subseteq\ISOL{}$: a library of known \isol{}s
+\end{itemize}
+\textit{Output}:
+\begin{itemize}
+\item \SPEC{} value, classifying the unknown \isol{} $u$
+\end{itemize}
+\textit{Requires}:
+\begin{itemize}
+\item $k$, $\alpha$, and the set of comparison metrics \COMP{} are predetermined
+\end{itemize}
+
+\begin{algorithmic}[1]
+\Procedure{ClassifySetwise$(u,\LIB)$}{}
+\State $\MERG{}\gets\{\emptyset\}$    \COMMENT[.6]{Create new common set.}
+\For{$C_i\in \COMP{}$}                \COMMENT[.6]{For each comparison metric:}
+\State$N_i \gets\emptyset$      \COMMENT[.55]{Make nearest neighbors list.}
+    \For{$p\in\LIB$}            \COMMENT[.55]{For each library element:}
+    \State $sim\gets$ \Call{$C_i$}{$u,p$}   \COMMENT{Compare.}
+    \State \add{$(sim,p)$}{$N_i$}           \COMMENT{Add to neighbors.}
+    \EndFor
+    \State \sort{$N_i$}{$sim$}    \COMMENT[.55]{Sort by most similar.}
+    \State $N_i\gets$\Call{Filter$_{k,\alpha}$}{$N_i$} \COMMENT[.45]{Keep the nearest.}
+    \For{$n\in N_i$}            \COMMENT[.55]{For each nearest neighbor:}
+    \State \add{$n$}{\MERG{}}\COMMENT{Add to common set.}
+    \EndFor
+\EndFor
+\State$s\gets$ \Call{FindMostPluralSpecies}{$M$}
+\State\Return $s$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}

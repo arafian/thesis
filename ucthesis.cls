@@ -1016,8 +1016,6 @@ Thesis Committee Chair
 
 \let\l@table\l@figure
 
-
-
 %    ****************************************
 %    *             BIBLIOGRAPHY             *
 %    ****************************************

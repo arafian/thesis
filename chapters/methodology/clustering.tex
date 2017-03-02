@@ -1,0 +1,32 @@
+\section{Clustering for Bacterial Strains}\label{sec:clusteringbs}
+For the purposes of this work, we define an \ecoli{} strain as a \textit{group of \ecoli{} isolates that share exactly the same \Ssixt{} and \Sfive{} DNA sequences.}
+
+From the computer science point of view, a bacterial strain is essentially a cluster of \ecoli{} \isol{} representations stored in \cplop{}.
+Our \mst{} method, thus, works as follows:
+\begin{enumerate}
+    \item \textbf{Strain Identification.} Identify bacterial strains in \cplop{} by clustering
+    all \cplop{} \isols{}.
+    \item \textbf{MST.} Given an isolate of unknown origin, find the cluster it belongs to.
+    Return the \spec{} of the plurality of isolates in the cluster.
+\end{enumerate}
+
+For our clustering algorithm, we use a density-based clustering algorithm
+developed by Johnson \cite{johnson2015density}. This algorithm extends DBSCAN
+for the case of two similarity metrics between data points (our isolates are compared
+based on two ITS regions) and implements an efficient spatial data structure to manage
+the storage and retrieval of the data points.
+
+In this paper we look at the results of clustering \cplop{} data using this algorithm from the perspective of \textit{cluster purity}. We call a cluster (strain) \textit{100\% pure}
+if all isolates that belong to it come from the same \spec{}. 
+
+Of interest to us is the following information:
+\begin{enumerate}
+    \item The number of 100\% pure clusters and the percentage of bacterial isolates from \cplop{} clustered into pure clusters.
+    \item The structure of impure clusters: specifically, whether a dominant \spec{} can
+    be clearly identified in each cluster.
+    \item Coverage: the total number of \cplop{} isolates found to belong to a strain.
+    \item MST Accuracy: the percentage of isolates for which the strain-based MST procedure produces the correct response.
+\end{enumerate}
+
+In the next section we provide a brief discussion of the density-based clustering algorithm
+of Johnson \cite{johnson2015density} and its use to build \cplop{} \isol{} clusters.

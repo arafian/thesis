@@ -85,9 +85,9 @@ As a result, \cplop{} researchers cannot use a \pyro{} to figure out the nucleot
 
 %%%%% ISOLATES %%%%%
 \subsection{Obtaining \& Comparing \ecolilong{} \Isols{}}
-\cp{} students collect \ecolilong{} (\ecoli{}) \isols{} from the fecals samples of a variety of different sources for a multitude of different studies.
-Sources include a variety of \spec{}, including humans, as well as environmental sources for \mst{} studies.
+\cp{} students collect \ecolilong{} (\ecoli{}) \isols{} from the fecals samples of a variety of different sources and compare them for a multitude of different studies.
 Culturing and \ecoli{} extraction occurs in an introductory cell and molecular biology class.
+Comparing two \isols{} requires separate consideration of each \itsshort{} region.
 
 The data stored in \cplop{} are obtained as follows.
 Biologists collect fecal sample from a host-subject of a known species.
@@ -103,6 +103,28 @@ Every year, \cp{} houses cattle from around the state starting in May for testin
 \cp{} researchers obtained fecal sample from every cow as they arrived and when they departed, comparing the \isols{} for similarity before and after cohabitation.
 \Isols{} derived from Humans make up a large proportion of \cplop{} because \cp{} students investigated \ecoli{} strain characteristics in a variety of studies \cite{neal2013escherichia, montana2012investigating, neal2012demographics}.
 Such disproportionate representation of \spec{} in library-based \mst{} is a common problem and \autoref{chap:results} discusses the effect with respect to \cplop{}.
+
+The nature of separately \pyroing{} the \Ssixt{} and \Sfive{} regions of an \isol{} requires adherence to the following principle:
+
+\begin{principle}[Comparing \Isols{}\index{Principle of Comparing \Isols{}}]\label{principle:comparing-isolates}
+The only valid comparison between \isols{} using the a comparison metric \pcfunclabel{} is a separate comparison of the \Ssixt{} \pyros{} using \pcfunclabel{} and \Sfive{} \pyros{} using \pcfunclabel{}:
+Given two isolates \isola{} and \isolb{}, where 
+\isola{} has \pyros{} \isolasixt{} and \isolafive{}
+and
+\isolb{} has \pyros{} \isolbsixt{} and \isolbfive{},
+\pcisolsixt{}
+and
+\pcisolfive{}
+are the only valid comparisons between the two \isols{}.
+\end{principle}
+\index{comparing \isols{}}
+\index{\pearson{}}
+\index{\pcfunclabel{}}
+
+\noindent 
+In other words, in order to compare two \isols{}, one must consider the \pyros{} of each \itsshort{} region separately, due to the fundamental concept of strains and why we \pyro{} these two regions.
+\autoref{fig:isolcompare} depicts the comparison process.
+Comparing an \Ssixt{} \pyro{} to an \Sfive{} \pyro{} with \pcfunclabel{} is completely meaningless, since the two \pyros{} represent different segments of \dna{} in the \ecoli{}.
 
 %%%%% PEARSON %%%%%
 \subsection{\Pearson{}}
@@ -176,28 +198,6 @@ The nature of this function works perfectly for what \pyros{} encode.
 The values in a \pyro{} represent peak light intensity values from chemical reactions, the intensity of which is proportional to the nucleotide content of the \dna{} \pyro{}ed.
 Peak intensity differences and noise from the machine are accounted for by \pearson{}, since it measures how the \pyro{} vector values change with respect to each other and machine variations will be similar between \pyro{}ings.
 
-The nature of separately \pyro{} the \Ssixt{} and \Sfive{} regions of an \isol{} requires adherence to the following principle:
-
-\begin{principle}[Comparing \Isols{}\index{Principle of Comparing \Isols{}}]\label{principle:comparing-isolates}
-The only valid comparison between \isols{} using the \pearson{} \pcfunclabel{} is a separate comparison of the \Ssixt{} \pyros{} using \pcfunclabel{} and \Sfive{} \pyros{} using \pcfunclabel{}:
-Given two isolates \isola{} and \isolb{}, where 
-\isola{} has \pyros{} \isolasixt{} and \isolafive{}
-and
-\isolb{} has \pyros{} \isolbsixt{} and \isolbfive{},
-\pcisolsixt{}
-and
-\pcisolfive{}
-are the only valid comparisons between the two \isols{}.
-\end{principle}
-\index{comparing \isols{}}
-\index{\pearson{}}
-\index{\pcfunclabel{}}
-
-\noindent 
-In other words, in order to compare two \isols{}, one must consider the \pyros{} of each \itsshort{} region separately, due to the fundamental concept of strains and why we \pyro{} these two regions.
-\autoref{fig:isolcompare} depicts the comparison process.
-Comparing an \Ssixt{} \pyro{} to an \Sfive{} \pyro{} with \pcfunclabel{} is completely meaningless, since the two \pyros{} represent different segments of \dna{} in the \ecoli{}.
-
 \begin{figure}
     \centering
     
@@ -237,7 +237,7 @@ Importantly, the name of the \spec{} and a unique designation for the \host{} ma
 For computationally intense 
 
 The web frontend, written in \php{}, allows \cplop{} to access the information in the database from the Internet to: perform queries for \isols{} and \pyros{}, browse \isol{} and \pyro{} datasets, and perform forensic matching. 
-The \isols{} in \cplop{} are visible from this interface (see \autoref{fig:browse-isolates}) as are the \pyros{} (\autoref{fig:browse-pyroprints}).
+The \isols{} in \cplop{} are visible from this interface (see \autoref{fig:browse}) as are the \pyros{}.
 \input{figures/frontend/browse}
 \Isols{} may have multiple \pyros{}, which the \cplop{} frontend allows researchers to browse, which \autoref{fig:browse-isolate-pyroprints} shows.
 \input{figures/frontend/browse-isolate-pyroprints}
