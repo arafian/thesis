@@ -1,6 +1,7 @@
-\section{Clustering for Bacterial Strains}\label{sec:clusteringbs}
-For the purposes of this work, we define an \ecoli{} strain as a \textit{group of \ecoli{} isolates that share exactly the same \Ssixt{} and \Sfive{} DNA sequences.}
-
+\section{Clustering for Bacterial Strains}\label{sec:method:clustering}
+In order to understand the make up of \bslongs{} in \cplop{}, we chose to investigate how a density-based clustering algorithm might group the \isols{} we have collected so far and how that might affect a rudimentary \mst{} technique based off of clustering: cluster an unknown \isol{} along with the \isols{} in \cplop{} and classify it as the most plural species of the cluster.
+Density-based clustering ties in well with our notion of closely-related strains of \ecoli{} (the relation being the separate \pearson{} comparison of each \itsshort{} region we use to compare \isols{}).
+\index{\ecoli{} strain}
 From the computer science point of view, a bacterial strain is essentially a cluster of \ecoli{} \isol{} representations stored in \cplop{}.
 Our \mst{} method, thus, works as follows:
 \begin{enumerate}
@@ -10,23 +11,61 @@ Our \mst{} method, thus, works as follows:
     Return the \spec{} of the plurality of isolates in the cluster.
 \end{enumerate}
 
-For our clustering algorithm, we use a density-based clustering algorithm
-developed by Johnson \cite{johnson2015density}. This algorithm extends DBSCAN
-for the case of two similarity metrics between data points (our isolates are compared
-based on two ITS regions) and implements an efficient spatial data structure to manage
-the storage and retrieval of the data points.
+Our clustering algorithm is the density-based clustering algorithm developed by Johnson \cite{johnson2015density}.
+It extends \dbscan{} for the case of two \compfuncs{} between data points (our isolates are compared based on the two \itsshort{} regions) and implements an efficient spatial data structure to manage the retrieval of the data points.
 
-In this paper we look at the results of clustering \cplop{} data using this algorithm from the perspective of \textit{cluster purity}. We call a cluster (strain) \textit{100\% pure}
-if all isolates that belong to it come from the same \spec{}. 
+\dbscan{} can easily use an efficient range query technique to find nearby points and speed up clustering time considerably by taking advantage of the \trieq{} that proper metric spaces have.
+Unfortunately, \pearson{} does not encode a metric space, because it fails the \trieq{}\footnote{$d(x,z)\leq d(x,y) + d(y,z)$}. 
+This complicates range queries, discussed in \autoref{sec:dbscan}, because spatial indexes tend to rely on the \trieq{}, usually with \euclid{}, to argue that certain points can be ignored during a spatial index tree traversal. 
 
-Of interest to us is the following information:
-\begin{enumerate}
-    \item The number of 100\% pure clusters and the percentage of bacterial isolates from \cplop{} clustered into pure clusters.
-    \item The structure of impure clusters: specifically, whether a dominant \spec{} can
-    be clearly identified in each cluster.
-    \item Coverage: the total number of \cplop{} isolates found to belong to a strain.
-    \item MST Accuracy: the percentage of isolates for which the strain-based MST procedure produces the correct response.
-\end{enumerate}
+To allow us the use of a spatial data structure with the \pearson{} to store data points during the clustering procedure we use instead the \clustplop{}, which we derive by recognizing in \autoref{eq:pearson} that \pearson{} is made up of \zscores{} of \pcveca{} and \pcvecb{}. 
+The \zscore{} of \pcveca{} is:
+\[
+\zscoreeq{\pca}
+\]
+where \vecavg{\pca} and \vecstddev{\pca} are the mean and standard deviation of the values in a single pyroprint respectively. 
+Thus, for clustering, we compare \pyros{} using the Euclidean distance \euczfunclabel{} of $z$-scores.
+\begin{equation}\label{eq:euclidean_zscores}
+\eucz{\pca}{\pcb}
+\end{equation}
+where \numdims{} is the number of dimensions.
+This allows us to use spatial indexes and \bigo{\log{n}} lookup in \dbscan{}.
 
-In the next section we provide a brief discussion of the density-based clustering algorithm
-of Johnson \cite{johnson2015density} and its use to build \cplop{} \isol{} clusters.
+Each \isol{} is represented in \cplop{} by a pair of \pyros{}: one each from each \Ssixt{} and \Sfive{} region, complicating the use of \dbscan{} and the meaning of $\alpha$ threshold.
+We handle this in \dbscan{} by performing two range queries, one each for \Ssixt{} and \Sfive{}, taking the intersection of the two results.
+We must, however, pick a suitable \eps{} for each \itsshort{} region.
+
+\cplop{} uses a threshold value of $\alpha = 0.995$  to compare two \pyros{}.
+\Pyros{} with \pearson{} above $\alpha$ are considered to represent the same \dna{} material, while \pyros{} with a \pearson{} below $\alpha$ are considered to represent different \dna{} material \cite{Shealy:SeniorProject, soliman2013cplop, SolimanDVMBNWKG12}.
+
+The number of dispensations \numdims{} used to build a \pyro{} differ for the \Ssixt{} and \Sfive{} regions.
+Because  $\numdims{}_{\Ssixt{}} \neq \numdims{}_{\Sfive{}}$, the original $\alpha$ under the space defined by \eqref{eq:euclidean_zscores} no longer applies in the same way to both regions.
+An alternative formulation of \eqref{eq:euclidean_zscores}, with respect to the \pearson{} \pcfunclabel{}, is:
+\begin{equation}\label{eq:euclidean_zscores_alternate}
+\euczalternate{\pca}{\pcb}
+\end{equation}
+where \numdims{} is the number of dimensions and $\numdims{}_{\pcveca{}} = \numdims{}_{\pcvecb{}} = \numdims{}$. 
+Using \autoref{eq:euclidean_zscores_alternate}, we can convert $\alpha$ to the values in \autoref{tab:converted_thresholds}. 
+We use these converted $\alpha$ values as the \eps{} for each \itsshort{} region's \codefn{RangeQuery}.
+\begin{table}
+\centering
+\caption{Converted $\alpha$ threshold to fit the new metric space defined by \eqref{eq:euclidean_zscores}.}
+\label{tab:converted_thresholds}
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{\itsshort{} Region} & \Ssixt{}     & \Sfive{}     \\
+                            & $\alpha$     & $\alpha$     \\ \hline
+\pcfunc{\pca}{\pcb}         & 0.995        & 0.995        \\ \hline
+\numdims{}                  & \Ssixtdims{} & \Sfivedims{} \\ \hline
+\euczfunc{\pca{}}{\pcb{}}   & 0.9747       & 0.9644       \\ \hline
+\end{tabular}
+\end{table}
+
+When clustering \cplop{} isolates using our density-based clustering algorithm, we need to set up the two parameters at our disposal: \minneigh{} and \eps{}.
+For \eps{} we choose the two values shown in Table \ref{tab:converted_thresholds} converted from the 0.995 \pearson{} threshold of pyroprint similarity. 
+Essentially, we only want to consider the \eps{}-neighborhood of a \pyro{} that contains the other \pyros{} that we consider to represent the same DNA material.
+
+For the \minneigh{} parameter, we use \textit{grid search} running our clustering with \minneigh{} set to $1, 2, 3, 4, 5, 6$, and $7$.
+The \minneigh{} value adjusts how strict our definition of a cluster is.
+That is, the higher the value of \minneigh{}, the more neighbors a core point must have with \eps{} of it and its neighbors to become a cluster.
+Balancing this value with the coverage of our algorithm is crucial to its success, because for too low of a value, we may not have a clear plurality in a cluster, while too high of a value may miss some smaller clusters that might classify our unknown \isol{} into something other than noise.

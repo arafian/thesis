@@ -1,15 +1,58 @@
 \section{Computational}
+Two computer science concepts are core to the clustering and classification techniques investigated in this thesis.
+One is a clustering algorithm that builds clusters by categorizing the datapoints into three different types, clustering some and denoting the unclustered as noise.
+Another is a classification technique that searches for nearby datapoints in order to classify an unknown datapoint.
+
+
+%%%%% DBSCAN %%%%%
 \subsection{Density-Based Clustering of \Isols{}}\label{sec:dbscan}
+Density-based clustering algorithms build clusters based on two parameters: the minimum number of neighbors \minneigh{},  a point must have to be a core point of a cluster, and \eps{}, the radius that those neighbors must be within. 
+These algorithms define clusters with respect to core points and border points --- points within \eps{} of a core point --- labeling everything else --- the singletons --- as noise.
+For this work, we chose to use \dbscan{} as the clustering technique for grouping \isols{} because dense groupings of similar \isols{} fits our intuition of bacterial \isol{} strains.
+Closely related ``families'' of \isols{} will appear in the same cluster and we want these clusters to have sufficient purity to aid us in \mst{}.
 
 
-Density-based clustering algorithms build clusters based on two parameters: the minimum number of neighbors, \minneigh{},  a point must have to be a core point of a cluster, and \eps{}, the 
-radius that those neighbors must be within. 
-These algorithms define clusters with respect to core points and border points --- points within \eps{} of a core point --- labeling everything else (singletons) as noise. 
-In the following section, we describe density-based clustering and summarize our modifications and optimizations of it for \cplop{}. In this section we provide a brief description
-of the density-based clustering algorithm we use to cluster \cplop{} \isols{} \cite{johnson2015density}.
-\subsection{\kNNlong{}}
-The \kNNlong{} classification algorithm (\kNN{}) is a straightforward algorithm to classify an unclassified object using a library. We use the concept of a \compfunc{} to formulate an idea of ``closeness.'' To outline the process:
+\dbscan{}\cite{ester1996density} provides the framework for our clustering algorithm. 
+It uses a \distmetric{}, a minimum neighbors value \minneigh{}, and an \eps{} range to categorize data points as one of three types:
+\index{\dbscan{}}
+\index{\distmetric{}}
+\index{\minneigh{}}
+\index{\eps{}}
+a core point, a border point, or noise.
+A \textit{core point} is a point that has at least \minneigh{} data points within \eps{} of it. 
+\index{core point}
+A \textit{border point} is a point that is within \eps{} of a core point, but that does not have \minneigh{} points within \eps{} of it.
+\index{border point}
+Every other point is \textit{noise}. 
+A \textit{cluster} is a group of neighboring core points with their associated border points.
+\index{cluster}
+According to this definition of a cluster, all clusters must have at least \minneigh{} points in them.
+\autoref{fig:density-based-clustering} depicts this process.
+\input{figures/density}
 
+Density-based clustering techniques require a distance metric, often times the \euclid{}, between data points in order to cluster.
+Performing fast range queries greatly improves the speed of clustering.
+If the range query can finish in \bigo{\log{n}} time, then \dbscan{} can run in \bigo{n\log{n}} time.
+Organizing the data into a spatial index can optimize these spatial queries.
+
+Spatial indexes structure the data into a search tree, similar to a binary search tree, organizing the points by distance.
+When querying for nearby points, the algorithm can traverse this search tree, ignoring certain points along the way.
+While this can speed up the range query to a \bigo{\log{n}}, many spatial indexes degenerate into a \bigo{n} operation. In the former case, this makes \dbscan{} run in \bigo{n\log{n}} time.
+
+In \dbscan{}, the \codefn{RangeQuery} function handles range quer\-ies by taking as parameters the data point and a distance and returning all data points within range of the query point.
+Mathematically, a \textit{range query} is a function $\mathit{RangeQuery}: D\times \R \rightarrow \{D\}$ that takes a query point $q\in D$ and a real-valued $\eps{}\in\R$ and returns $\{d\in D | \mathit{Dist}(q, d)\} < \eps{}\}$ --- the set of all other points within \eps{} of the query point --- where $\mathit{Dist}$ is some \distmetric{} $\mathit{Dist}: D\times D \rightarrow \R $.
+\index{range query}
+If the \distmetric{} forms a proper metric space, then data structures like quad trees and octrees can speedup \eps{} range queries for a point.
+One can imagine the range query as a hypersphere centered at the query point with a radius of the query range.
+In order to make \codefn{RangeQuery} fast, we had to make some optimizations.
+
+
+%%%%% kNN %%%%%
+\subsection{\kNNlong{}}\label{sec:knn}
+The \kNNlong{} classification algorithm (\kNN{}) is a straightforward algorithm to classify an unclassified object using a library. 
+Using a \compfunc{}, it compares the unclassified object to ``nearby'' classified objects.
+It uses the concept of a \compfunc{} to formulate an idea of ``closeness,'' asserting that the similarity an unknown object has to a class of objects relates to the class of the unknown objects itself.
+To outline the process:
 Given an unclassified object \UNKNOWN{}, a library of classified objects \LIB{}, and a \compfunc{}, \COMP{}:
 \begin{enumerate}
 \item Compare \UNKNOWN{} to each object in \LIB{} using \COMP{}
@@ -18,5 +61,11 @@ Given an unclassified object \UNKNOWN{}, a library of classified objects \LIB{},
 \item Consider only the top $k$ entries in $N$, called the \knnlong{} \label{knn:filter}
 \item Classify \UNKNOWN{} as the \textit{most plural} classification in the \knnlong{} list
 \end{enumerate}
+\autoref{alg:knn} describes this process in pseudocode.
+\input{algorithms/knn}
 
-The motivation is that the unclassified object must be ``close'' to some of the classified objects in our database, using an appropriate measure of closeness for the data. By choosing the ``most plural'' classification --- the classification that shows up the highest number of times ---  in the \knnlong{} we can, with some accuracy, classify our unknown object.
+The motivation is that the unclassified object must be ``close'' to some of the classified objects in our database, using an appropriate measure of closeness --- the \textit{\compfunc{}} --- for the data. 
+\index{\compfunc{}}
+By choosing the \textit{most plural} classification --- the classification that shows up the highest number of times ---  in the \knnlong{} we can, with some accuracy, classify our unknown object.
+\index{most plural classification}
+

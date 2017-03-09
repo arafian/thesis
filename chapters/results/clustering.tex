@@ -1,10 +1,10 @@
-\section{Clustering}\label{sec:clusteringbsresults}
+\section{Clustering}\label{sec:results:clustering}
 In gauging how effective our clustering method is against \cplop{}, we looked at the distribution of cluster sizes, the number of \isols{} that fell into high purity clusters, the number of unique species in each cluster and how that affected the size and purity, and overall coverage and accuracy metrics.
 From these data, we gained some insight into the clustering algorithm and were able to visualize some predictions we had about the biological aspects of strains.  
 
 % SIZES --------------------
 \subsection{Cluster Size Distribution}
-\begin{figure*}[ht!]
+\begin{sidewaysfigure}
     \centering
     \subfloat[
         Cluster Size Distribution for \minneigh{} of 3
@@ -28,7 +28,7 @@ From these data, we gained some insight into the clustering algorithm and were a
     }
     \caption{The size distribution of clusters skews heavily towards smaller clusters.}
     \label{fig:clust_size_dist}
-\end{figure*}
+\end{sidewaysfigure}
 
 \autoref{fig:clust_size_dist} shows the distribution of cluster sizes as \minneigh{} increase from 3, to 5, to 7. 
 We see that at all three \minneigh{} values, the number of small clusters (fewer than 10) dominates the overall makeup of clusters.
@@ -42,7 +42,7 @@ Furthermore, while the number of clusters with 10-20 \isols{} stays relatively s
 
 % PURITIES --------------------
 \subsection{Cluster Purity Distribution}
-\begin{figure*}[ht!]
+\begin{sidewaysfigure}
     \centering
     \subfloat[
         Cluster Purity Distribution for \minneigh{} of 3
@@ -67,7 +67,7 @@ Furthermore, while the number of clusters with 10-20 \isols{} stays relatively s
     
     \caption{The number of \isols{} that fall into a cluster of a given purity. We notice that that the number of \isols{} that fall into the 0.90 to 1.00 cluster purity range decreases as we increase \minneigh{} from 3 to 5, but increases from 5 to 7.}
     \label{fig:clust_purity_dist}
-\end{figure*}
+\end{sidewaysfigure}
 
 Of interest to our investigation is the number of \isols{} that fall within clusters of a particular purity. 
 \autoref{fig:clust_purity_dist} shows the number of \isols{} that fall within a cluster of a particular purity as a histogram.
@@ -80,7 +80,7 @@ We suspect (and discuss in \autoref{sec:results:discussion}) that certain \ecoli
 % UNIQUE --------------------
 \subsection{Unique Species in Each Cluster}\label{sec:results:unique}
 
-\begin{figure*}[ht!]
+\begin{sidewaysfigure}
     \centering
     \subfloat[
         Cluster Purity for \minneigh{} of 3
@@ -105,7 +105,7 @@ We suspect (and discuss in \autoref{sec:results:discussion}) that certain \ecoli
 
     \caption{These three dimensional graphs show the individual cluster purity in the horizontal axis, the number of unique species in the vertical axis, and the relative size of the cluster in the diameter of the dots. Each individual dot is its own cluster. We find that as we restrict cluster to needing more neighbors (increasing the \minneigh{} value), we lose some clusters and gain more pure clusters.}
     \label{fig:clust_pure}
-\end{figure*}
+\end{sidewaysfigure}
 
 Knowing the number of unique \spec{} in our clusters is key to understanding how our
 strain-based \mst{} algorithm  performs.

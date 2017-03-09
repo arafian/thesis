@@ -1,0 +1,30 @@
+\begin{algorithm}[H]
+\caption{\kNNlong{}}\label{alg:knn}
+
+\textit{Input}:
+\begin{itemize}
+\item $u\in\UNKN{}$: an unknown \isol{}
+\item $\LIB{}\subseteq\ISOL{}$: a library of known \isol{}s
+\end{itemize}
+\textit{Output}:
+\begin{itemize}
+\item \SPEC{} value, classifying the unknown \isol{} $u$
+\end{itemize}
+\textit{Requires}:
+\begin{itemize}
+\item $k$, $\alpha$, and the \compfunc{} \compfunclabel{} are predetermined
+\end{itemize}
+
+\begin{algorithmic}[1]
+\Procedure{ClassifyKNN$(u,\LIB)$}{}
+\State$N \gets\emptyset$    \COMMENT[.6]{Make nearest neighbors list.}
+\For{$p\in\LIB$}            \COMMENT[.6]{For each library element:}
+    \State $sim\gets$ \Call{$C_i$}{$u,p$}   \COMMENT[.47]{Compare.}
+    \State \add{$(sim,p)$}{$N$}          \COMMENT[.47]{Add to neighbors.}
+\EndFor
+\State \sort{$N$}{$sim$}      \COMMENT[.6]{Sort by most similar.}
+\State$s\gets$ \Call{FindMostPluralSpecies}{$\{n_1,\dots,n_k\,|\,n_i\in N\}$}
+\State\Return $s$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}

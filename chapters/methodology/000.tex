@@ -1,4 +1,12 @@
 \chapter{Methodology}\label{chap:methodology}
+There are two main components we investigated for the purpose of \mst{}: 
+clustering for \bslongs{}
+and
+the \kraplong{} (\krap{}).
+The clustering method we use is based off of the density-based clustering algorithm \dbscan, as introduced in \autoref{sec:dbscan} and described in \cite{johnson2015density}.
+The \krap{} derives its classification ability from \kNNlong{}, outlined in \autoref{sec:knn}, adding four methods to resolve the multiple \knnlong{} lists that are a product of multiple neighbor-\compfuncs{} and an \a{} threshold to filter the \knnlong{} lists.
+This Chapter describes the use of these two methods as classification methodologies for \cplop{}.
+
 \input{chapters/methodology/clustering}
 
 \input{chapters/methodology/krap}

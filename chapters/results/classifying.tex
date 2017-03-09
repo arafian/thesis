@@ -1,4 +1,6 @@
-\section{Classifying}
+\section{Classifying}\label{sec:results:classification}
+\newcommand{\krapfigurewidth}{\linewidth}
+\newcommand{\krapfigure}[1]{\includegraphics[height=0.50\textheight]{#1}}
 
 \subsection{Adjusting \k{}}
 Adjusting $k$ is an important first step. We investigate $k$ values ranging from 1 to 17, but focus primarily on $k \leq 12$. At this point, we do not filter the results in order to focus primarily on the affect of the size of the \knn{} list. Thus, $\alpha$ is 0, allowing for the full $k$ list to factor into classification.
@@ -6,7 +8,7 @@ Adjusting $k$ is an important first step. We investigate $k$ values ranging from
 \begin{figure}[t]
 \centering
 %\includegraphics[width=3in]{figures/krap/Overall-ALL-metrics-12-0_000}
-\includegraphics[width=3in]{figures/krap/Overall-ALL-metrics-12-0_000_new}
+\krapfigure{figures/krap/Overall-ALL-metrics-12-0_000_new}
 \caption{The accuracy  of all classifications performed with CPLOP across the four different algorithms with $\alpha=0.00$ shows little improvement for $k>5$. We look at only the percentage of correct classifications, since that value is equivalent to the precision and the recall.}
 \label{fig:k_overall}
 \end{figure}
@@ -15,7 +17,7 @@ Overall, for $k\geq5$, the accuracy does not improve, but instead levels off. De
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=3in]{figures/krap/Cow-ALL-metrics-12-0_000}
+\krapfigure{figures/krap/Cow-ALL-metrics-12-0_000}
 \caption{There are 1838 Cow \isol{}s in CPLOP. For most resolution algorithms, we observe little improvement when $k>5$.}
 \label{fig:k_cow}
 \end{figure}
@@ -23,7 +25,7 @@ One good example is the Cow. As Figure \ref{fig:k_cow} shows, Cow follows a tren
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=3in]{figures/krap/Cow-ALL-pvr-12-0_000}
+\krapfigure{figures/krap/Cow-ALL-pvr-12-0_000}
 \caption{There are 1838 Cow \isol{}s in CPLOP. Looking at the Recall as it compares to the Precision for $\alpha=0.99$ allows us to visualize the tradeoffs we make when picking a $k$ value. Labeled within each datapoint is the $k$ value at that point}
 \label{fig:k_cow_pvr}
 \end{figure}
@@ -36,7 +38,7 @@ By adding a threshold value, we investigated whether this further limitation imp
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=3.25in]{figures/krap/Overall-ALL-metrics-12-[-0_----0_98--0_99]}
+\krapfigure{figures/krap/Overall-ALL-metrics-12-[-0_----0_98--0_99]}
 \caption{Shown is the accuracy of all classifications performed with CPLOP across the four different algorithms. We find that the accuracy of certain resolution algorithms perform better with higher $\alpha$ values.}
 \label{fig:alpha_overall}
 \end{figure}
@@ -52,7 +54,7 @@ Overall, we observe that the accuracy slightly improves as we increase the $\alp
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=3in]{figures/krap/Cow-ALL-pvr-12-0_990}
+\krapfigure{figures/krap/Cow-ALL-pvr-12-0_990}
 \caption{There are 1838 Cow \isol{}s in CPLOP. Increasing the $\alpha$ for a species with this many \isol{}s made minimal improvements to the accuracy on all but the resolution by intersection algorithm, which, when compared to Figure \ref{fig:k_cow_pvr} noticeably improved.}
 \label{fig:alpha_cow_pvr}
 \end{figure}
@@ -71,7 +73,7 @@ Overall, with $\alpha=0.00$, Figure \ref{fig:k_overall} illustrates that the res
 Poorly represented species, like the Cat, Chicken, and Seagull did not benefit from the resolution by union algorithm, each achieving no classifications, correct or otherwise.
 
 \input{data/krap/tab_profile098}
-Once we restrict with a somewhat loose threshold of 0.98, overall we see that the intersection method provides the best accuracy, improving on non-thresholded values. For $k=7$ and $\alpha=0.98$, the intersection algorithm achieves 78.0\% accuracy\%, while resolution by winner and union respectively achieve 66.4\% and 76.7\% accuracy.
+Once we restrict with a somewhat loose threshold of 0.98, overall we see that the intersection method provides the best accuracy, improving on non-thresholded values. For $k=7$ and $\alpha=0.98$, the intersection algorithm achieves 78.0\% accuracy, while resolution by winner and union respectively achieve 66.4\% and 76.7\% accuracy.
 
 Table \ref{tab:profile098} shows that a handful of poorly represented species achieved slightly better results when $\alpha=0.98$. Notably, the intersection algorithm $F$-measure increased slightly for Wild Turkey, Cat, and Chicken on the order of 3\%.
 
@@ -84,10 +86,10 @@ Restricting with $\alpha=0.99$, our definition of strain differentiation, overal
 
 For poorly represented species, we see some similar improvements for $P$, $R$, and $F_1$, but also some exceptions. Wild Turkey for example, improves by about 2\%-3\% for resolutions by winner and union and 11\% for resolution by intersection, while Cat decreases by 3\% for resolution by winner, but improves by 6\% and 47\% for resolution by union and intersection.
 
-\subsection{Poorly Represented Species}
+\subsection{Underrepresented Species}
 \begin{figure}[t]
 \centering
-\includegraphics[width=3in]{figures/krap/Chicken-ALL-metrics-12-0_000}
+\krapfigure{figures/krap/Chicken-ALL-metrics-12-0_000}
 \caption{There are 40 Chicken \isol{}s in CPLOP. Unfortunately, due to their low representation in CPLOP, classification accuracy is low.}
 \label{fig:k_chicken}
 \end{figure}
