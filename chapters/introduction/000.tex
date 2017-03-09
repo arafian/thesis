@@ -87,24 +87,33 @@ The latter, by Eric Johnson, is a density-based clustering algorithm --- \dbscan
 
 While \ohclust{} takes advantage of all of the information available in \cplop{}, \dbscan{} encodes our notion of a strain the closest and allows for strain discovery without needing to guess what ontology provides the best insight.
 Moreover, the range query optimizations made in \cite{johnson2015density} allow for efficient, low-memory querying of \isols{} while still encoding the notion of \pearson{} between \isols{}, an improvement over \ohclust{}'s need to precompute and store distances in order to mitigate the consequences of agglomerative clustering's need for a high number of distance computations.
-It may be that by preclustering \isols{}, we can speed up the computation of \krap{}.
+In a nutshell, \dbscan{} uses a distance metric, a minimum neighbors value \minneigh{}, and an \eps{} range to categorize data points as one of three types --- core point, border point, or noise --- building clusters from every core point within \eps{} and their associated border points.
+%It may be that by preclustering \isols{}, we can speed up the computation of \krap{}.
 
-In a nutshell, \dbscan{} uses a distance metric, a minimum neighbors value \minneigh{}, and an \eps{} range to categorize data points as one of three types: core point, border point, or noise.
-A core point is a point that has at least \minneigh{} data points within \eps{} of it. 
-A border point is a point that is within \eps{} of a core point, but that does not have \minneigh{} points within \eps{} of it. Every other point is noise. 
-The algorithm then defines a cluster as a group of neighboring core points with their associated border points.
+%In a nutshell, \dbscan{} uses a distance metric, a minimum neighbors value \minneigh{}, and an \eps{} range to categorize data points as one of three types: core point, border point, or noise.
+%A core point is a point that has at least \minneigh{} data points within \eps{} of it. 
+%A border point is a point that is within \eps{} of a core point, but that does not have \minneigh{} points within \eps{} of it. Every other point is noise. 
+%The algorithm then defines a cluster as a group of neighboring core points with their associated border points.
 %According to this definition of a cluster, all clusters must have at least \minneigh{} points in them.
+
+While the original purpose of \cplop{} was to support \mst{} and some manual \mst{} studies have been conducted, little research has been done on building an automated \mst{} method.
+Most studies performed with \cplop{} focused on validating and exploring the various biological features captured by the \pyro{}ing process and the comparison metric used to compare \pyros{}, the \pearson{}.
+Building objective, repeatable classification metrics that use the data in \cplop{} to assist \mst{} can help biologists inform investigators of a possible source that caused, or is causing, fecal contamination.
+
+Since strains are core to \cplop{}, it is appropriate for us to incorporate them into our \mst{} methodology and prudent to have a fallback if that methodology fails to make a determination.
+The first \mst{} method classifies an unknown-source \isol{} thus: incorporate the \isol{} into \cplop{}, construct strains, and classify the \spec{} of the unknown \isol{} as the dominant \spec{} of the strain it ends up in.
+The second, fallback technique simply compares the unknown \isol{} to every \isol{} in \cplop{} and classifies as the dominant \spec{} of the most similar \isols{}.
+For the former, we investigate \dbscan{} from \cite{johnson2015density} and used for \mst{} in \cite{DBLP:conf/bcb/McGovernJDBKV16}.
+For the latter, fallback method, we investigate The \kraplong{} (\krap{}) from \cite{DBLP:conf/bibm/McGovernDKBVG15}.
 
 %%%% CONCLUSION: CLUSTERING
 In \cite{DBLP:conf/bcb/McGovernJDBKV16}, we constructed the notion of a bacterial strain purely from the clusters produced by \dbscan{} --- i.e. we defined bacterial strains to be the clusters produced by \dbscan{}.
 We studied the cluster purity --- the proportion of \isols{} in a cluster that are of the same species --- of the entire clustering at different \minneigh{} values.
 In doing so, we observed the presence of so-called transient \ecoli{} strains --- strains of \ecoli{} that show up in many different \spec{} --- that tend to confound \mst{}.
 More importantly, it showed that \cplop{} has relatively few of these transient strains and a large number of pure strains.
+Its limitation comes in the coverage of \cplop{} --- how much of our dataset 
 
 %%%% BACKGROUND: kNN CLASSIFICATION
-While the original purpose of \cplop{} was to support \mst{} and some manual \mst{} studies have been conducted, little research has been done on building an automated \mst{} method.
-Most studies performed with \cplop{} focused on validating and exploring the various biological features captured by the \pyro{}ing process and the comparison metric used to compare \pyros{}, the \pearson{}.
-Building objective, repeatable classification metrics that use the data in \cplop{} to assist \mst{} can help biologists inform investigators of a possible source that caused, or is causing, fecal contamination.
 
 
 As a first step towards building an effective classification technique, we chose to use the \kNNlong{} (\kNN) classification algorithm on \cplop{} to measure how accurately we can classify samples that we know the \spec{} of.

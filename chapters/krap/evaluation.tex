@@ -1,0 +1,43 @@
+\section{Evaluation}\label{sec:evaluation:krap}
+
+Evaluating \krap{} requires an understanding of how well it classifies the \spec{} of an \isol{}.
+There are a few areas of focus that we have when interpreting the results of \krap{}:
+\begin{itemize}
+\item What size $k$ achieves the best results?
+\item What size $\alpha$ achieves the best results?
+\item Which metric resolution algorithm achieves the best results?
+\end{itemize}
+Indeed we can define ``best'' in many ways, but we choose to look at two metrics, recall and precision, and a combination of the two, the $F$-measure. The metrics look at the accuracy of the classification on the object and the object on the classification respectively, while \fmeasure{} hopes to represent a balance between the two. 
+We test \krap{} by performing cross validation with holdout.
+
+\subsection{Cross Validation with Holdout}
+\index{cross validation with holdout}
+To gauge the effectiveness of \krap{} at classifying the \spec{} of an \isol{}, we cross-validated against the library by separately holding out each \isol{} in CPLOP from CPLOP, classifying it against CPLOP, and verifying whether it is correct. 
+Since each \isol{} in CPLOP has the correct \spec{}, we know whether a classification is correct or not.
+
+\subsection{Recall}
+In our study, recall tracks how well we are able to discover all isolates from a given category, i.e. with a given host species.
+Given a category (\spec{} name), the recall for that host species is the percentage of isolates taken from this host species that have been properly identified.
+For example, if our database had 100 cat isolates, and 74 of them were classified by our method as having come from a cat, the recall would be 74\%.
+In this study, we compute both overall recall (what percentage of \isols{} were classified as their proper \spec{} label) as well as \spec{}-level recall (what percentage of isolates that came from dogs/humans/sheep/etc. were classified
+as their proper label).
+
+\subsection{Precision}
+Precision tracks how well our method avoids misclassification errors. 
+Given a category and a list of isolates our method classified as belonging to it, the precision of the method on the
+category is the percent of isolates from the list that has the correct label.
+For example, if our method returned 100 isolates labelled ``Dog'' of which 77 isolates really did come from dogs, the precision of the method is 77\%. As with recall, we compute both overall precision, as well as the precision for each category/species label.
+
+\subsection{\textit{F}-Measure}
+The \fmeasure{}, $F_1$, is the \textit{harmonic mean} of the precision, $P$ and the recall, $R$:
+\begin{equation*}
+    F_1 
+    =
+    \frac{2}{\frac{1}{P}
+    +
+    \frac{1}{R}}
+    = 2\cdot
+    \frac{P\cdot R}
+    {P + R}
+\end{equation*}
+While we prefer maximizing this value, a value near 0.5 means we are doing well.

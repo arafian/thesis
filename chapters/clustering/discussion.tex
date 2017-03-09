@@ -1,0 +1,45 @@
+% STRAINS --------------------
+\section{Discussion}\label{sec:discussion:clustering}
+
+In general, we observe two trends in our data. For the \isols{} that get clustered into strains,
+our approach correctly identifies the \spec{} with over 80-85\% accuracy. This accuracy
+is sufficient to conduct sophisticated \mst{} studies. Most of the strains discovered 
+in the \cplop{} data show high degree of purity, and even considering the presence of 
+a few large impure clusters, most of the clustered \isols{} fall into strains of high purity.
+
+
+At the same time, the pure strain-based approach suffers from a drop in the coverage as the size of a cluster grows. 
+This means that in general \cplop{} \isols{} tend to be very diverse
+and come from strains for which not enough DNA material has been collected and pyrosequenced.
+Identifying the \spec{} for \isols{} that do not fall into strains/clusters using the pure strain-based
+method is impossible. In future work, our goal is to combine the \kNN{}-based \mst{} method
+of \cite{DBLP:conf/bibm/McGovernDKBVG15} with the strain-based approach discussed in this paper
+to increase coverage while preserving the high \mst{} accuracy.
+
+
+
+
+%%%%%%%
+
+
+%Considering how many \isols{} end up in clusters of high purity, as \autoref{fig:clust_purity_dist_3} shows, this occurrence appears to be infrequent.
+%Nevertheless, viewing the progression of graphs in \autoref{fig:clust_pure} implies that the clusters morph and change into each other as we increase \minneigh{}.
+
+One factor explaining the large impure clusters is the possibility that these
+clusters represent what the  biologists call  ``transient'' strains, i.e., strains that 
+persist in more than one \spec{}. 
+%That is, certain strains might show up in many \spec{} and not just relegated to one \spec{}.
+Such a characteristic can compound \mst{} by making certain strains of \ecoli{} less reliable as \fib{} for identifying \spec{}.
+In \autoref{fig:clust_purity_dist}, we see evidence of that and it is revealed in \autoref{fig:clust_pure}.
+One mitigation strategy may be to reduce the presence of these strains in library holding the \fib{}.
+Another may be to fall back to an alternative \mst{} technique that works with \cplop{} when an unknown \isol{} falls into an impure cluster.  Finally, if a true transient strain is indeed
+discovered, and an \isol{} is mapped to it, our \mst{} procedure can simply acknowledge the
+that the query \isol{} belongs to a transient strain and provide information about the \spec{}
+that show high frequency of \ecoli{} incidence from this strain.
+
+
+
+%It also is possible that a more complicated or biologically-motivated strategy may work best.
+%One avenue of validation we chose not to pursue was $k$-fold cross-validation.
+%Previous work \cite{DBLP:conf/bibm/McGovernDKBVG15} has used it for validation.
+%Future work may include it, but large $k$ values are likely to partition the dataset into groups different enough to create widely varying clusterings.

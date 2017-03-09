@@ -1,0 +1,67 @@
+\section{Evaluation}\label{sec:evaluation:clustering}
+Clustering for \bslongs{} has two aspects that we must evaluate: how pure the \bslongs{} (clusters) are and how many of the \isols{} in \cplop{} end up in a cluster (as opposed to noise).
+The former tests whether the \ecoli{} strains stay relatively unique to the \spec{} from which they come from, the core theory of library-based \mst{}.
+The latter tells us how effective 
+\autoref{sec:methodology:clustering} describes how we can use clustering as a \mst{} method --- cluster an unknown \isol{} along with the \isols{} in \cplop{} and classify it as the most plural species of the cluster.
+Cluster purity can easily gauge how effective this technique is at \mst{}, since the concept readily summarizes to how pure, from a \spec{} perspective, a cluster is.
+\Dbased{} clustering algorithms such as \dbscan{} may not cluster every datapoint, as mentioned in \autoref{sec:dbscan},  labeling some datapoints (\isols{}) as noise and thus leaving them unclustered.
+%Thus, it is crucial that our \mst{} method has the ability to assert a classification on any \isol{} we provide it, driving us to use \kNN{} for classification.
+%Nevertheless, by applying \dbscan{} to \cplop{} \isols{}, we gained insight into the nature of \ecoli{} strains that we discuss in \autoref{sec:results:clustering}.
+
+\subsection{Cluster Purity}
+In this paper we look at the results of clustering \cplop{} data using this algorithm from the perspective of cluster purity. We call a cluster (\bslong{}) \textit{100\% pure}
+if all isolates that belong to it come from the same \spec{}. 
+
+Of interest to us is the following information:
+\begin{enumerate}
+    \item The number of 100\% pure clusters and the percentage of bacterial isolates from \cplop{} clustered into pure clusters.
+    \item The structure of impure clusters: specifically, whether a dominant \spec{} can
+    be clearly identified in each cluster.
+    \item Coverage: the total number of \cplop{} isolates found to belong to a strain.
+    \item MST Accuracy: the percentage of isolates for which the strain-based MST procedure produces the correct response.
+\end{enumerate}
+Thus, our core measure is \textit{cluster purity}, the proportion of a cluster that comes from the most plural \spec{} of that particular cluster.
+\index{cluster purity}
+A \textit{100\% pure cluster} is a cluster which only contains data points (\isols{}) with the same class label (same \spec{} of origin). 
+
+Consider a cluster $C=\{c_1,\ldots, c_K\}$. Let $s(c)$ refer to the species of isolate $c$.
+Let $m$ be the plurality species label for data points in $C$, and let the total number of points in
+$C$ with $s(c) = m$ be $s_m$. Then the \textit{individual cluster purity} $\nu$ of cluster $C$ is:
+\[
+    \nu(C) = \frac{s_m}{K}
+\]
+
+\subsection{Clustering Coverage}
+In addition to computing the purity of individual clusters we want to have an understanding of the overall purity on the entire dataset.
+Given a \textit{clustering} $\mathcal{C} = \{C_1,\dots,C_n\}$ on a dataset, we define the size $\mathcal{M}$ of the set of clusters: 
+\index{clustering}
+\begin{equation}\label{eq:num_isols}
+\mathcal{M} = \sum_{i = 0}^{n} |C_i|
+\end{equation}
+The \textit{overall clustering purity} is:
+\index{overall clustering purity}
+\begin{equation}\label{eq:overall_clustering}
+\sum_{i=1}^{n} \frac{|C_i|}{\mathcal{M}}\cdot\nu(C_i)
+\end{equation}
+One can think of \eqref{eq:overall_clustering} as a form of weighted arithmetic mean of the purities, where the size of the cluster adds more weight to the value.
+
+% COVERAGE --------------------
+%\subsection{Clustering Coverage} 
+\label{sec:validation:coverage}
+Coverage of the dataset is important to an effective \mst{} method.
+The density-based clustering method we use has one key disadvantage: a clustering run  with the parameter \minneigh{}, treats all points that do not fit into a cluster of size  of at least \minneigh{} as noise.
+This means that as the value of \minneigh{} grows, so will the number of \isols{} that do not cluster into a strain.
+
+Given the parameter \minneigh{} of the clustering algorithm, we collect the following four measures, that collectively represent the breakdown of all data points (\isols{}) in \cplop{}:
+\begin{enumerate}
+    \item \textit{Noise.} Number/percentage of \isols{} clustered as noise points.
+    \item \textit{Misses.} Number/percentage of \isols{} from  minority species
+    in impure clusters.
+     \item \textit{Hits.} Number/percentage of \isols{} from plurality species in
+     impure clusters.
+     \item \textit{Pure points.} Number/percentage of \isols{} in 100\% pure clusters.
+\end{enumerate}
+\index{noise}
+\index{misses}
+\index{hits}
+\index{pure points}

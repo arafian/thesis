@@ -59,3 +59,19 @@ As \cite{rogers2005detecting} points out, the strains in \ecoli{} can change con
 Geography, time, rainfall, and habitat all can have an effect on the strains present in a particular \spec{} and even \host{}.
 The transient nature of some \ecoli{} strains forces researchers to build a library that contains a considerable number of samples to encapsulate the full spread of strains in the relevant \spec{}, adding to the cost and efforts needed to perform \mst{} and usually limiting the environmental scope of the library built to the environment in which it was sampled from.
 \cploplong{} attempts to remedy this by building a cheap yet reliable method of distinguishing between strains using \pyros{} on the two \itsshort{} regions of \ecoli{}.
+
+\section{\cplop{} Makeup}
+\autoref{fig:species} shows the distribution of \cplop{} \isols{} considered in this study among its 53 different \spec{}.
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=\linewidth]{figures/bs/species_hist.pdf}
+    \caption{
+    A histogram of the number of \isols{} of each species in our study, taken from \cplop{}.
+    There are 4,610 total \isols{} from 53 different \specs{}.}
+    \label{fig:species}
+\end{figure}
+
+There are a total of 4,610 \isols{} in our dataset\footnote{A simplified version of \cplop{} containing \isol{} IDs, \spec{}, and \zscore{}s can be found at \texttt{https://github.com/jmcgover/cplop-acm-bcb-2016}.}. As seen from Figure \ref{fig:species},
+the organic growth of \cplop{} yielded disproportionately many \ecoli{} isolates originating
+from humans and cows (however, as shall be seen below, these isolates belong to a large number of strains). Each \isol{} is represented in \cplop{} with two \pyros{} ---  one each for \its{1} and \its{2} 
+region.
