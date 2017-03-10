@@ -1,14 +1,24 @@
 \chapter{\MSTlong{} Methodology}\label{chap:methodology}
-There are two main components we investigated for the purpose of \mst{}: 
-clustering for \bslongs{}
-and
-the \kraplong{} (\krap{}).
-The clustering method we use is based off of the density-based clustering algorithm \dbscan, as introduced in \autoref{sec:dbscan} and described in \cite{johnson2015density}.
-The \krap{} derives its classification ability from \kNNlong{}, outlined in \autoref{sec:knn}, adding four methods to resolve the multiple \knnlong{} lists that are a product of multiple neighbor-\compfuncs{} and an \a{} threshold to filter the \knnlong{} lists.
-This Chapter describes the use of these two methods as classification methodologies for \cplop{}.
+An effective, automated \mstlong{} (\mst{}) methodology is key to \cplop{}'s success as a tool to aid fecal contamination investigators.
+Until recently, \cp{} researchers performed most \mst{} by hand \cite{moritz2015application, shapiro2015source}.
+The goal for any \mst{} method is to take fecal matter or a substance contaminated with fecal matter and determine, or classify, the \spec{} that provided the fecal matter; \libdep{} \mst{} methods leverage the known-\spec{} information stored in their library, usually digital representations of \fiblong{} (\fib{}) stored in a database.
+\cplop{} is such a \libdep{} technique that 
+Given a \fib{} \isol{} from an unknown-\spec{}\footnote{referred to simply as the ``unknown'' or ``unknown \isol{}''}, a \libdep{} \mst{} technique determines the \spec{} of the unknown using the information in the library.
+Towards this end, we built and investigated two \mst{} techniques, one that approaches \spec{} classification from the perspective of strains in the database and another that directly uses \isols{} present in the database to classify the \spec{}.
+This Chapter outlines the abstract approaches we chose to take, while \autoref{chap:clustering} and \autoref{chap:krap} detail the specific algorithms we used for the strain-based and \isol{}-based approaches.
 
-\input{chapters/methodology/clustering}
+\section{Strain-Based}
+Strain typing is central to \libdep{} \mst{} methods and building a \spec{} classification technique that uses strains directly is an intuitive approach to take.
+If an unknown-\spec{} matches a strain in the library, then we can make a reasonable assertion as to its \spec{} if the strain has a dominant \spec{}.
+Thus, our approach is: 
+\begin{enumerate}
+    \item Incorporate the unknown \fib{} \isol{} into the database
+    \item Build strains of the \fib{} \isols{}
+    \item Classify the source \spec{} of the \isol{} as the dominant \spec{} of the strain it ended up in
+\end{enumerate}
+Strain construction can happen in many ways, but from a computational perspective, it is very amenable to clustering.
+If one can imagine a coordinate space that encapsulates mathematical representations (vectors) of \fib{} \isols{}, then strains are the close groupings (clusters) of these \isol{} representations.
+For \cplop{}
+As explained in \autoref{chap:clustering}, we use \dbscan{}, a \dbased{} clustering algorithm 
 
-\input{chapters/methodology/krap}
-
-\input{chapters/methodology/cplop}
+\section{\Isol{}-Based}
