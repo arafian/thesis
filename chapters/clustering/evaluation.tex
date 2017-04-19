@@ -4,11 +4,11 @@ The former tests whether the \ecoli{} strains stay relatively unique to the \spe
 The latter tells us how effective 
 \autoref{sec:methodology:clustering} describes how we can use clustering as a \mst{} method --- cluster an unknown \isol{} along with the \isols{} in \cplop{} and classify it as the most plural species of the cluster.
 Cluster purity can easily gauge how effective this technique is at \mst{}, since the concept readily summarizes to how pure, from a \spec{} perspective, a cluster is.
-\Dbased{} clustering algorithms such as \dbscan{} may not cluster every datapoint, as mentioned in \autoref{sec:dbscan},  labeling some datapoints (\isols{}) as noise and thus leaving them unclustered.
+\Dbased{} clustering algorithms such as \dbscan{} may not cluster every datapoint, as mentioned in \autoref{sec:background:dbscan},  labeling some datapoints (\isols{}) as noise and thus leaving them unclustered.
 %Thus, it is crucial that our \mst{} method has the ability to assert a classification on any \isol{} we provide it, driving us to use \kNN{} for classification.
 %Nevertheless, by applying \dbscan{} to \cplop{} \isols{}, we gained insight into the nature of \ecoli{} strains that we discuss in \autoref{sec:results:clustering}.
 
-\subsection{Cluster Purity}
+\subsection{Cluster and Clustering Purity}
 In this paper we look at the results of clustering \cplop{} data using this algorithm from the perspective of cluster purity. We call a cluster (\bslong{}) \textit{100\% pure}
 if all isolates that belong to it come from the same \spec{}. 
 
@@ -31,12 +31,11 @@ $C$ with $s(c) = m$ be $s_m$. Then the \textit{individual cluster purity} $\nu$ 
     \nu(C) = \frac{s_m}{K}
 \]
 
-\subsection{Clustering Coverage}
 In addition to computing the purity of individual clusters we want to have an understanding of the overall purity on the entire dataset.
 Given a \textit{clustering} $\mathcal{C} = \{C_1,\dots,C_n\}$ on a dataset, we define the size $\mathcal{M}$ of the set of clusters: 
 \index{clustering}
 \begin{equation}\label{eq:num_isols}
-\mathcal{M} = \sum_{i = 0}^{n} |C_i|
+\mathcal{M} = \sum_{i = 1}^{n} |C_i|
 \end{equation}
 The \textit{overall clustering purity} is:
 \index{overall clustering purity}
@@ -44,6 +43,8 @@ The \textit{overall clustering purity} is:
 \sum_{i=1}^{n} \frac{|C_i|}{\mathcal{M}}\cdot\nu(C_i)
 \end{equation}
 One can think of \eqref{eq:overall_clustering} as a form of weighted arithmetic mean of the purities, where the size of the cluster adds more weight to the value.
+
+\subsection{Clustering Coverage}
 
 % COVERAGE --------------------
 %\subsection{Clustering Coverage} 

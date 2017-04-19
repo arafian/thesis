@@ -17,7 +17,7 @@ It extends \dbscan{} for the case of two \compfuncs{} between data points (our i
 
 \dbscan{} can easily use an efficient range query technique to find nearby points and speed up clustering time considerably by taking advantage of the \trieq{} that proper metric spaces have.
 Unfortunately, \pearson{} does not encode a metric space, because it fails the \trieq{}\footnote{$d(x,z)\leq d(x,y) + d(y,z)$}. 
-This complicates range queries, discussed in \autoref{sec:dbscan}, because spatial indexes tend to rely on the \trieq{}, usually with \euclid{}, to argue that certain points can be ignored during a spatial index tree traversal. 
+This complicates range queries, discussed in \autoref{sec:background:dbscan}, because spatial indexes tend to rely on the \trieq{}, usually with \euclid{}, to argue that certain points can be ignored during a spatial index tree traversal. 
 
 To allow us the use of a spatial data structure with the \pearson{} to store data points during the clustering procedure we use instead the \clustplop{}, which we derive by recognizing in \autoref{eq:pearson} that \pearson{} is made up of \zscores{} of \pcveca{} and \pcvecb{}. 
 The \zscore{} of \pcveca{} is:

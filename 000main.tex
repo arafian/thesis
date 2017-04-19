@@ -51,6 +51,8 @@
 \usepackage{listings}
 %\usepackage[]{algorithm2e}
 \usepackage{setspace}
+\usepackage{ulem}
+\usepackage{CJKutf8}
 
 % FLOAT UTILITIES
 \usepackage{longtable}
@@ -74,10 +76,11 @@
 \usetikzlibrary{decorations.pathreplacing}
 \usepackage{pgfplots}
 \pgfplotsset{compat=1.3}
-\usepackage{color}
+\usepackage{color, colortbl}
 \usepackage{xcolor}
 \definecolor{cpgreen}{HTML}{0A7951}
 \definecolor{cpgold}{HTML}{FADA5E}
+\definecolor{cpgreengold}{HTML}{82AA58}
 
 % DOCUMENT UTILITIES
 \usepackage{appendix}
@@ -93,6 +96,11 @@
 \def\sectionautorefname{Section}
 \def\subsectionautorefname{Section}
 \def\chapterautorefname{Chapter}
+
+\usepackage{morefloats}
+\usepackage{ifthen}
+\usepackage{silence}
+\WarningFilter{latex}{Text page}
 
 
 % MACROS
@@ -207,15 +215,14 @@
 \printglossaries
 
 %%%%%%%%%% INDEX
-\clearpage
-\phantomsection
+%\clearpage
+%\phantomsection
 %\addcontentsline{toc}{chapter}{Index}
 \printindex
 
 %%%%%%%%%% BIBLIOGRAPHY
 \nocite{*}
 \bibliography{bibliography}
-
 
 %%%%%%%%%% APPENDICES
 % Indents Appendix in Table of Contents

@@ -5,7 +5,7 @@ Another is a classification technique that searches for nearby datapoints in ord
 
 
 %%%%% DBSCAN %%%%%
-\subsection{Density-Based Clustering of \Isols{}}\label{sec:dbscan}
+\subsection{Density-Based Clustering of \Isols{}}\label{sec:background:dbscan}
 Density-based clustering algorithms build clusters based on two parameters: the minimum number of neighbors \minneigh{},  a point must have to be a core point of a cluster, and \eps{}, the radius that those neighbors must be within. 
 These algorithms define clusters with respect to core points and border points --- points within \eps{} of a core point --- labeling everything else --- the singletons --- as noise.
 For this work, we chose to use \dbscan{} as the clustering technique for grouping \isols{} because dense groupings of similar \isols{} fits our intuition of bacterial \isol{} strains.
@@ -48,10 +48,13 @@ In order to make \codefn{RangeQuery} fast, we had to make some optimizations.
 
 
 %%%%% kNN %%%%%
-\subsection{\kNNlong{}}\label{sec:knn}
+\subsection{\kNNlong{}}\label{sec:background:knn}
 The \kNNlong{} classification algorithm (\kNN{}) is a straightforward algorithm to classify an unclassified object using a library. 
 Using a \compfunc{}, it compares the unclassified object to ``nearby'' classified objects.
 It uses the concept of a \compfunc{} to formulate an idea of ``closeness,'' asserting that the similarity an unknown object has to a class of objects relates to the class of the unknown objects itself.
+\autoref{fig:knn}
+
+
 To outline the process:
 Given an unclassified object \UNKNOWN{}, a library of classified objects \LIB{}, and a \compfunc{}, \COMP{}:
 \begin{enumerate}
@@ -64,8 +67,21 @@ Given an unclassified object \UNKNOWN{}, a library of classified objects \LIB{},
 \autoref{alg:knn} describes this process in pseudocode.
 \input{algorithms/knn}
 
+\input{figures/knn}
+
 The motivation is that the unclassified object must be ``close'' to some of the classified objects in our database, using an appropriate measure of closeness --- the \textit{\compfunc{}} --- for the data. 
 \index{\compfunc{}}
-By choosing the \textit{most plural} classification --- the classification that shows up the highest number of times ---  in the \knnlong{} we can, with some accuracy, classify our unknown object.
+By choosing the \textit{most plural} or \textit{dominant} classification --- the classification that shows up the highest number of times ---  in the \knnlong{} we can, with some accuracy, classify our unknown object.
 \index{most plural classification}
+\index{dominant classification}
 
+\autoref{fig:knn} depicts an example graph of datapoints in a coordinate space. 
+All but one of the has a class associated with it, any of \achar{}, \bchar{}, or \cchar{}. 
+The class of one point, denoted by \unknownchar{}, requires determination. 
+\Compfuncs{} like \euclid{} or \manhattan{} may be the most appropriate way to compare these datapoints.
+
+\autoref{fig:knn} shows how using \kNN{} with \euclid{} and various \k{} can classify this point.
+Figures~\ref{fig:knn:4}, \ref{fig:knn:6}, and \ref{fig:knn:9} show the \knnlong{} lists as \k{} changes from 4, to 6, to 9.
+At \k{}=4, we see that \kNN{} classifies the unknown as \achar{} because there are 2 \achar{}s, but only one each of \bchar{} and \cchar{}.
+For \k{}=6, \bchar{} is the resulting classification, since \bchar{} shows up 3 times --- more than the 2 \achar{} and 1 \cchar{}.
+Finally, as we extend \k{} all the way out to 9, \kNN{} classifies it as \cchar{}, since such an extension exposes the \knnlong{} list to all 4 \cchar{}'s, more than any other classification.

@@ -1,24 +1,39 @@
 \chapter{\MSTlong{} Methodology}\label{chap:methodology}
 An effective, automated \mstlong{} (\mst{}) methodology is key to \cplop{}'s success as a tool to aid fecal contamination investigators.
 Until recently, \cp{} researchers performed most \mst{} by hand \cite{moritz2015application, shapiro2015source}.
-The goal for any \mst{} method is to take fecal matter or a substance contaminated with fecal matter and determine, or classify, the \spec{} that provided the fecal matter; \libdep{} \mst{} methods leverage the known-\spec{} information stored in their library, usually digital representations of \fiblong{} (\fib{}) stored in a database.
-\cplop{} is such a \libdep{} technique that 
-Given a \fib{} \isol{} from an unknown-\spec{}\footnote{referred to simply as the ``unknown'' or ``unknown \isol{}''}, a \libdep{} \mst{} technique determines the \spec{} of the unknown using the information in the library.
-Towards this end, we built and investigated two \mst{} techniques, one that approaches \spec{} classification from the perspective of strains in the database and another that directly uses \isols{} present in the database to classify the \spec{}.
-This Chapter outlines the abstract approaches we chose to take, while \autoref{chap:clustering} and \autoref{chap:krap} detail the specific algorithms we used for the strain-based and \isol{}-based approaches.
+The goal for any \mst{} method, when used to source fecal contamination, is to take fecal matter or a substance contaminated with fecal matter and determine, or classify, the \spec{} that provided the fecal matter; \libdep{} \mst{} methods leverage the known-\spec{} information stored in their library, usually digital representations of \fiblong{} (\fib{}) stored in a database.
+\cplop{} is such a \libdep{} technique that aims to support \mst{} using \pyros{} of both \itsshort{} regions of the \fib{} \ecoli{}.
+Given a \fib{} \isol{} from an unknown-\spec{}\footnote{often referred to as the ``the unknown'' or ``the unknown \isol{}''}, a \libdep{} \mst{} technique determines the \spec{} of the unknown using the information in the library.
+Towards this end, we built and investigated two \mst{} techniques, one that approaches \spec{} classification from the perspective of strains in the database and another that directly uses \isols{} present in the database.
+This Chapter outlines the abstract approaches we chose to take, while \autoref{chap:clustering} and \autoref{chap:krap} detail the specific techniques we used for the strain-based and \isol{}-based approaches respectively.
 
 \section{Strain-Based}
 Strain typing is central to \libdep{} \mst{} methods and building a \spec{} classification technique that uses strains directly is an intuitive approach to take.
 If an unknown-\spec{} matches a strain in the library, then we can make a reasonable assertion as to its \spec{} if the strain has a dominant \spec{}.
-Thus, our approach is: 
+Thus, given an unknown-\spec{} \isol{}: 
 \begin{enumerate}
-    \item Incorporate the unknown \fib{} \isol{} into the database
-    \item Build strains of the \fib{} \isols{}
+    \item Incorporate the unknown-\spec{} \fib{} \isol{} into \cplop{}
+    \item Build strains of \fib{} using the \isols{} in \cplop{}
     \item Classify the source \spec{} of the \isol{} as the dominant \spec{} of the strain it ended up in
 \end{enumerate}
 Strain construction can happen in many ways, but from a computational perspective, it is very amenable to clustering.
 If one can imagine a coordinate space that encapsulates mathematical representations (vectors) of \fib{} \isols{}, then strains are the close groupings (clusters) of these \isol{} representations.
-For \cplop{}
-As explained in \autoref{chap:clustering}, we use \dbscan{}, a \dbased{} clustering algorithm 
+For \cplop{}, this means constructing strains from the \pyros{} of collected \ecoli{} \isols{}.
+
+As explained in \autoref{chap:clustering}, we use \dbscan{}, a \dbased{} clustering algorithm that we introduce in \autoref{sec:background:dbscan}, which builds clusters using a similarity metric, allowing for the concept of noise --- datapoints that remain unclustered.
+Dense groupings of similar \isols{} fits our intuition of bacterial \isol{} strains because closely related ``families'' of \isols{} will appear in the same cluster.
+A primary limitation of \dbscan{} is that it may not cluster some \isols{}, which still aligns with our notion of strains; sometimes, \isols{} are not part of any strain present in \cplop{}.
+As a result, we need a fallback \mst{} method that can work for every \isol{}.
 
 \section{\Isol{}-Based}
+Using \isols{} directly can give us a level of flexibility that strict strain typing may not allow.
+An unknown-\spec{} may not fit within the sometimes strict definition of a strain that a particular library may have, but we may still be able to make a reasonable assertion as to its \spec{} based on the \isols{} that are most similar to the unknown.
+Thus, given an unknown-\spec{} \isol{}: 
+\begin{enumerate}
+    \item Find $k$ known-\spec{} \isols{} from \cplop{} most similar to it, called the \knnlong{}
+    \item Classify the source \spec{} of the \isol{} as the dominant \spec{} of the \knnlong{}
+\end{enumerate}
+
+The described approach is the \kNNlong{} classification algorithm (\kNN{}) introduced in \autoref{sec:background:knn}, however, due to the multiple \compfuncs{} needed between \isols{}, \kNN{}, in its natural form, will not work with \cplop{}.
+\autoref{sec:background:isolates} details why the comparison of two \isols{} to each other requires multiple \compfuncs{}.
+\autoref{chap:krap} explains the \compfunc{} resolution strategy employed by the \kraplong{}, the \isol{}-based \mst{} method we built and investigated.

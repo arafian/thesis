@@ -1,4 +1,5 @@
 \section{Results}\label{sec:results:krap}
+Our results focused on adjusting three parameters: the number \k{} of nearest neighbors to consider, the \a{} threshold value, and the resolution algorithm.
 \newcommand{\krapfigurewidth}{\linewidth}
 \newcommand{\krapfigure}[1]{\includegraphics[height=0.50\textheight]{#1}}
 
@@ -71,7 +72,6 @@ Additionally, values in the tables represent the proportion of the three metrics
 
 \input{data/krap/tab_profile000}
 Overall, with $\alpha=0.00$, Figure \ref{fig:k_overall} illustrates that the resolution by union algorithm consistently performs better. For $k=7$ and $\alpha = 0.00$, Table \ref{tab:profile000} shows that using the resolution by unions algorithm performs with 76.4\% accuracy with meanwise and resolution by winner and intersection respectively achieving 73.2\%, 65.9\%, and 74.7 accuracy\%.
-
 Poorly represented species, like the Cat, Chicken, and Seagull did not benefit from the resolution by union algorithm, each achieving no classifications, correct or otherwise.
 
 \input{data/krap/tab_profile098}

@@ -11,7 +11,7 @@ From these data, we gained some insight into the clustering algorithm and were a
         ]{
         \label{fig:clust_size_dist_3}
         \includegraphics[width=0.30\linewidth]{figures/bs/neigh_size_3}
-    }
+        }
     \hfill
     \subfloat[
         Cluster Size Distribution for \minneigh{} of 5
@@ -145,6 +145,16 @@ The dark green area is the proportion of pure points.
 Light green is the number of hits.
 Gold is the number of misses.
 
+\autoref{tab:coverage:values} displays the number of \isols{} that fall into the categories in \autoref{fig:clustered}.
+\input{tables/coverage-values}
+\autoref{tab:coverage:percent:total} shows the percentage of \textit{all} \isols{} that ended up in a cluster where their \spec{} was the minority, the most dominant, and that make up the entirety of the cluster and those categorized as noise.
+\input{tables/coverage-percent-total}
+\autoref{tab:coverage:percent:total} shows the percentage of \textit{clustered} \isols{} that ended up in a cluster where their \spec{} was the minority, the most dominant, and that make up the entirety of the cluster.
+\input{tables/coverage-percent-clustered}
+\autoref{tab:coverage:percent:clustered:noise} compares the percent of all \isols{} that \dbscan{} placed in a cluster and determined to be noise, while \autoref{tab:coverage:values:clustered:noise} shows the actual values.
+\input{tables/coverage-percent-clustered-noise}
+\input{tables/coverage-values-clustered-noise}
+
 It is good to note that the number of misses are low and flatten out as we increase \minneigh{} from a value of 3, giving us good reason not to investigate clustering where \minneigh{} is greater than we have already investigated.
 The number of pure points stays relatively equal to the number of hits.
 Important in \autoref{fig:clustered} is the amount of \isols{} that the algorithm does cluster.
@@ -162,7 +172,7 @@ It is unfortunate that the number of noise \isols{} is high, but we plan to miti
     \label{fig:overall}
 \end{figure}
 
-Overall clustering purity, defined in \eqref{eq:overall_clustering}, is the number of \isols{} clustered that end up in a cluster where their \spec{} is the most plural \spec{}. 
+Overall clustering purity, defined in \autoref{eq:overall_clustering}, is the number of \isols{} clustered that end up in a cluster where their \spec{} is the most plural \spec{}. 
 The overall accuracy is the proportion of correctly classified \isols{} out of all the \isols{} under consideration.
 We want to maximize both values, but would prefer the former over the latter.
 Coverage is an issue we are concerned about, but we plan to mitigate this issue by leveraging  \cite{DBLP:conf/bibm/McGovernDKBVG15} against clusters of \isols{}.

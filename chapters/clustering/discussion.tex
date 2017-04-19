@@ -25,18 +25,14 @@ to increase coverage while preserving the high \mst{} accuracy.
 %Considering how many \isols{} end up in clusters of high purity, as \autoref{fig:clust_purity_dist_3} shows, this occurrence appears to be infrequent.
 %Nevertheless, viewing the progression of graphs in \autoref{fig:clust_pure} implies that the clusters morph and change into each other as we increase \minneigh{}.
 
-One factor explaining the large impure clusters is the possibility that these
-clusters represent what the  biologists call  ``transient'' strains, i.e., strains that 
-persist in more than one \spec{}. 
+One factor explaining the large impure clusters is the possibility that these clusters represent what the  biologists call  ``transient'' strains, i.e., strains that  persist in more than one \spec{}. 
 %That is, certain strains might show up in many \spec{} and not just relegated to one \spec{}.
 Such a characteristic can compound \mst{} by making certain strains of \ecoli{} less reliable as \fib{} for identifying \spec{}.
 In \autoref{fig:clust_purity_dist}, we see evidence of that and it is revealed in \autoref{fig:clust_pure}.
-One mitigation strategy may be to reduce the presence of these strains in library holding the \fib{}.
-Another may be to fall back to an alternative \mst{} technique that works with \cplop{} when an unknown \isol{} falls into an impure cluster.  Finally, if a true transient strain is indeed
-discovered, and an \isol{} is mapped to it, our \mst{} procedure can simply acknowledge the
-that the query \isol{} belongs to a transient strain and provide information about the \spec{}
-that show high frequency of \ecoli{} incidence from this strain.
-
+One mitigation strategy may be to reduce the presence of these strains in the library holding the \fib{}.
+Another may be to fall back to an alternative \mst{} technique that works with \cplop{} when an unknown \isol{} falls into an impure cluster.
+Finally, if a true transient strain is indeed discovered, and an \isol{} is mapped to it, our \mst{} procedure can simply acknowledge that the query \isol{} belongs to a transient strain and provide information about the \spec{} that show high frequency of \ecoli{} incidence from this strain.
+In order to handle the lack of complete clustering coverage --- when \dbscan{} marks an \isol{} as noise --- we propose a fallback method : the \kraplong{}, described in \autoref{chap:krap}.
 
 
 %It also is possible that a more complicated or biologically-motivated strategy may work best.

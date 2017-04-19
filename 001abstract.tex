@@ -1,9 +1,9 @@
 %----------%
 Fecal contamination in bodies of water is an issue that frequently plagues public and environmental water supplies.
 %----------%
-Often, restricting access to water sources until the contaminants dissipate is the only option natural resource managers have.
+%Often, restricting access to water sources until the contaminants dissipate is the only option natural resource managers have.
 %----------%
-Finding the source of the fecal matter can help prevent further contamination and more quickly curb the issue in the future.
+Finding the source of the fecal matter can help prevent further contamination and more quickly curb future contamination.
 %----------%
 \MSTlong{} (\mst{}) aims to determine the source \spec{} of strains of microbiological lifeforms and \libdep{} \mst{} is one method that can assist in this fecal matter sourcing.
 %----------%
@@ -11,10 +11,19 @@ Recently, the Biology Department and the Computer Science Department at \cplong{
 %----------%
 Students collect fecal samples, culture \ecoli{} \isols{} from the samples to pyrosequence the two \itslong{} (\itsshort{}) DNA regions of \ecoli{}, and insert this data, called pyroprints, into \cplop{}.
 %----------%
-We investigate two \mst{} methodologies that use \cplop{}: one that uses \dbscan{} to cluster for \bslongs{} and another set of algorithms called the \kraplong{} (\krap{}), which consists of four strategies to resolve the multiple \knnlong{} lists that result from applying \kNNlong{} classification to the two \itsshort{} regions of an \ecoli{} \isol{}.
+This work investigates two \mst{} methodologies that use \cplop{}: a bacterial strain-based approach and an \isol{}-based approach.
 %----------%
-By using \dbscan{} to build strains, we found many pure strains, validating the effectiveness of using \ecoli{} in \cplop{}, and verified the existence of transient strains, but discovered that it left much of the data unclustered.
 %----------%
-As a fallback, we turn to \krap{}, which allows us to perform \mst{} in a straightforward way with high accuracy for \spec{} well-represented by \cplop{}.
+%This work investigates two \mst{} methodologies that use \cplop{}: one that uses \dbscan{} to cluster for \bslongs{} and another called the \kraplong{} (\krap{}), which consists of four strategies to resolve the multiple \knnlong{} lists that result from querying the two \itsshort{} regions of an \ecoli{} \isol{}.
 %----------%
-\vspace{-72pt}
+By using \dbscan{} to build \bslongs{}, we found that between 41\% and 51\% of the clustered data fell into pure strains, while another 34\% to 43\% fell into a cluster where its \spec{} was the most dominant, validating the effectiveness of using \ecoli{} in \cplop{}.
+%----------%
+We also verified the expected existence of transient strains and found them to be few in number.
+%----------%
+Unfortunately, between 27\% and 53\% of the data remained unclustered.
+%----------%
+As a fallback, we turn to the \kraplong{} (\krap{}), which consists of four strategies to resolve the multiple \knnlong{} lists that result from querying the two \itsshort{} regions of an \ecoli{} \isol{}.
+%----------%
+It provides us a variety of resolution strategies that garner between 65\% and 85\% overall accuracy and over 75\% accuracy for well-represented \spec{}.
+%----------%
+%\vspace{-72pt}

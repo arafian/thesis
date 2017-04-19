@@ -1,12 +1,13 @@
 \chapter{Related Work}\label{chap:related-work}
 
 Existing \MSTlong{} (\mst{}) methodologies require a \fiblong{} (\fib{}) fingerprinting method that allows for strain discrimination and a method of classification.
-Early work in \mst{} \cite{bitton2005microbial} worked by measuring the ratio of fecal coliform bacteria to streptococci ratios, which fell out of use due to the ``widely varying survival rates of the bacterial groups in the environment'' \cite{sargeant2011review}.
+Early \mst{} methods \cite{bitton2005microbial} worked by measuring the ratio of fecal coliform bacteria to streptococci ratios.
+These methods fell out of use due to the ``widely varying survival rates of the bacterial groups in the environment'' \cite{sargeant2011review}.
 In order to effectively use \fib{} for \mst{}, researchers had to develop new methods to fingerprint and classify them with the appropriate \spec{} or find related strains.
 
 Fingerprinting \fib{} usually falls into two categories: phenotyping and genotyping.
 Phenotypic methods of fingerprinting usually involve ``morphology of colonies on various culture media, biochemical tests, serology, killer toxin susceptibility, pathogenicity, and antibiotic susceptibility,'' none of which allows researchers to reliably distinguish between closely related strains \cite{Li892}.
-Genetic fingerprinting --- genotyping --- ``has become widely used \dots{} due to its high resolution'' \cite{Li892} and many methods exist that allow for effective discrimination \cite{scott2002microbial, sargeant2011review}.
+Genetic fingerprinting --- genotyping --- ``has become widely used \dots{} due to its high resolution'' \cite{Li892} and many methods exist that allow for effective discrimination \cite{sargeant2011review, scott2002microbial}.
 
 Classification methods use a variety of statistical measures to make determinations to either related strains or \spec{}, but most fall into library-dependent and library-independent.
 Library-independent \mst{} searches for the presence of certain microbes in fecal matter or contaminated water.
@@ -14,10 +15,10 @@ The presence of certain microbes can indicate what \spec{} may have deposited th
 Unfortunately, this method relies on prior knowledge of the types of microbes that may occur in the types of potential \spec{}\footnote{Often times, these methods can only detect whether the fecal content came from a human and maybe some domestic animal species \cite{sargeant2011review}.}, limiting the effectiveness of \spec{} determination \cite{sargeant2011review}.
 
 Library dependent techniques work by building a database of \fib{} fingerprints that come from known \spec{}.
-These techniques usually differ in the fingerprinting process, which the classification technique is dependent upon.
+These techniques usually differ in the fingerprinting process, which the classification technique depends upon.
 Using these libraries, researchers can handle common \fib{} from a variety of \spec{}, making it incredibly agile.
 Disadvantages of this technique come from: the need to build a large library size which can become cost-prohibitive; the transient nature of some \ecoli{} strains, assuming \ecoli{} is the \fib{} of choice; and the fact that the applicability of the database is limited to the region in which the database was built from \cite{sargeant2011review}.
-\cplop{} is a library-based \mst{} technique \ecoli{} as \fib{} and \pyros{} as cost-effective fingerprints and researchers use it to understand \ecoli{} strains and determine the \spec{} of fecal matter.
+\cplop{} is a library-based \mst{} technique that uses \ecoli{} as \fib{} and \pyros{} as cost-effective fingerprints and researchers use it to understand \ecoli{} strains and determine the \spec{} of fecal matter.
 
 % Pyroprints
 \section{\Pyro{}ing}
@@ -28,7 +29,7 @@ One can find a detailed discussion of why \pyros{} perform better than these opt
 \cp{} researchers introduce the concept and construction of \pyros{} in \cite{Black2014121, kent2014pyroprinting}, describing the process through which they construct \pyros{} from the multiple loci of isolated \ecoli{} \dna{}.
 It discusses the work done in \cite{Shealy:SeniorProject}, which confirmed the reproducibility of \pyro{}ing and determined that a \pearson{} correlation above 0.99 ``could be a good threshold to minimize false separation of isolates from the same strain.''
 These works explain in detail the advantages of using the \pyro{}ing methodology with respect to cost (``[p]yroprinting could reduce the cost of a library-based \mst{} investigation by up to 60\%'' \cite{Black2014121}), reproducibility (much of which can be found in \cite{Shealy:SeniorProject}), and discrimination between (known) strains of \ecoli{}, compared to existing state of the art methods.
-It asserts that while \ecoli{} were used, the \pyro{}ing process applies to a broad range of bacteria whose genome contain multiple loci.
+It asserts that while the researchers used \ecoli{}, the \pyroing{} process applies to a broad range of bacteria whose genome contain multiple loci.
 
 \Silico{} simulations done in \cite{DBLP:conf/bibm/BrandtMSBGK12} delved into the sensitivity of using the \pearson{} \pcfunclabel{} to compare constructed \pyros{} of known \ecoli{} alleles gathered from the \ncbilong{} database.
 \cuda{} programming on a GPU sped up the \pcfunclabel{} computation considerably, allowing the researchers to understand, given all possible combinations of seven known alleles to form a simulated \isol{}, how many \isols{} are ``\textit{hard to differentiate},'' i.e. have a \pcsixt{} and \pcfive{} above 0.99 \cite{DBLP:conf/bibm/BrandtMSBGK12}.
@@ -53,7 +54,7 @@ The following is a list of empirical strain research performed using \cplop{}:
     \item \ecolilong{} Strain Diversity in Humans: Effects of Sampling Effort and Methodology \cite{neal2013escherichia}
     \item Investigating the Dominant \ecolilong{} Strain in Lambs and Ewes Using Pyroprinting:  A Novel Method for Strain Identification \cite{nguyeninvestigating}
     \item Source Tracking of Fecal Contamination Along San Luis Obispo (SLO) Creek \cite{shapiro2015source}
-    \item Short Communication:  Typing and Tracking Bacillaceae in Raw Milk and Milk Powder Using Pyroprinting \cite{vanderkelen2016short}
+    \item Short Communication:  Typing and Tracking \textit{Bacillaceae} in Raw Milk and Milk Powder Using Pyroprinting \cite{vanderkelen2016short}
 \end{itemize}
 
 These studies provide significant insight into the evolution and transmission of \ecoli{} strains and demonstrate the effectiveness of using \pyros{} and \cplop{} as a \mst{} method.
@@ -62,11 +63,11 @@ What we aim to provide with \krap{} is a set of tools that students and research
 
 % Ontological Hierarchical Clustering
 \section{Clustering}
-Presented in \cite{DBLP:conf/bibm/MontanaDNBK11, montana2012investigating} are the comparison of two hierarchical clustering techniques. \primerfive{} \cite{clarke1993non} and a chronology-sensitive hierarchical clustering algorithm.
+Presented in \cite{DBLP:conf/bibm/MontanaDNBK11, montana2012investigating} is the comparison of two hierarchical clustering techniques. \primerfive{} \cite{clarke1993non} and a chronology-sensitive hierarchical clustering algorithm.
 Using metadata about when researchers collected the samples used to build the \isols{}, the hierarchical clustering proceeds to first cluster \isols{} from samples collected on the same day and continues to cluster by increasing days away from the initial collection date.
 They found that the clusters built by the chronology-sensitive hierarchical clustering algorithm resembled the \primerfive{} clusters, but were unsure of whether these clusters were appropriate.
 
-The work in \cite{DBLP:conf/bibm/MontanaDNBK11, montana2012investigating} went on to become a part of \ohclust{} (\ohclustlong{}) \cite{SolimanDVMBNWKG12, montana2013ontological, montana2013algorithms}, a metadata-aware hierarchical clustering algorithm that allows \cplop{} researchers to provide a metadata ontology to guide the order of hierarchical clustering.
+The work in \cite{DBLP:conf/bibm/MontanaDNBK11, montana2012investigating} went on to become a part of \ohclust{} (\ohclustlong{}) \cite{montana2013algorithms, montana2013ontological, SolimanDVMBNWKG12}, a metadata-aware hierarchical clustering algorithm that allows \cplop{} researchers to provide a metadata ontology to guide the order of hierarchical clustering.
 Hierarchical clustering in general is a very calculation-intensive process, making it a problematic tool for servers with limited computational power.
 The computational crux comes with the number of comparisons needed between clusters --- clusters of \isols{} in \cplop{}'s case.
 
@@ -77,33 +78,34 @@ The representatives used to compute distance may be the members in each cluster 
 Computationally intense distance metrics make implementing a performant hierarchical clustering algorithm problematic for programmers.
 The way \ohclust{} gets around this difficulty is by precomputing the distances --- \pearson{}s in \cplop{} --- beforehand and storing them in memory.
 This greatly speeds up the clustering, but requires at least 4GB of memory for the distance lookup table alone.
-Since the servers that host \cplop{} only have 4GB of RAM in total, \ohclust{} cannot be directly incorporated into \cplop{}.
+Since the servers that host \cplop{} only have 4GB of RAM in total, directly incorporating \ohclust{} into \cplop{} is not possible.
 
 % Density Based Clustering
 In \cite{johnson2015density}, Eric Johnson presents a density-based clustering algorithm for \pyros{} in order to build an intuitive clustering method that uses density and nearness and an efficient range query algorithm to find nearby \isols{}.
 \dbscan{} \cite{ester1996density}, short for \dbscanlong{}, can be efficient if the distance metric used satisfies the \trieq{}.
 Unfortunately, \pearson{} does not satisfy the \trieq{}, but work in \cite{johnson2015density} adjusts the comparison metric to use the \euclid{} of \zscores{} and optimizes further by organizing the \pyros{} into a tree, making \dbscan{} a viable method of clustering for the servers that host \cplop{}.
 
-An attempt to use \cite{johnson2015density} as a na{\"i}ve \mst{} method in \cite{DBLP:conf/bcb/McGovernJDBKV16} revealed that for the \isols{} that actually clustered (i.e. were not determined to be noise), the accuracy was fairly high.
-Essentially, \cite{DBLP:conf/bcb/McGovernJDBKV16} clusters an unknown-\spec{} \isol{} along with the rest of the known-\spec{} \isols{} \cplop{} and classifies it as the most plural \spec{} in the resulting cluster.
+An attempt to use \dbscan{} for \cplop{} \isols{} \cite{johnson2015density} as a na{\"i}ve \mst{} method in \cite{DBLP:conf/bcb/McGovernJDBKV16} revealed that for the \isols{} that actually clustered (i.e. were not determined to be noise), the accuracy was fairly high.
+Essentially, the \mst{} method in \cite{DBLP:conf/bcb/McGovernJDBKV16} clusters an unknown-\spec{} \isol{} along with the rest of the known-\spec{} \isols{} in \cplop{} and classifies it as the most plural \spec{} in the resulting cluster.
 However, \cite{johnson2015density} clustered only about half of the \isols{} in \cplop{}, while the rest remained unclustered and thus unclassified.
 The investigation in \cite{DBLP:conf/bcb/McGovernJDBKV16} was useful to confirm suspicions of so-called ``transient'' strains of \ecoli{} bacteria.
-\autoref{sec:dbscan} discusses the details of \cite{johnson2015density} relevant to this thesis, \autoref{sec:methodology:clustering} describes a potential methodology to use it as a \mst{} method, and \autoref{sec:results:clustering} expands upon the investigation in \cite{DBLP:conf/bcb/McGovernJDBKV16} and determines whether it can be useful to supplement a \mst{} method like \krap{}.
+\autoref{sec:background:dbscan} discusses the details of \cite{johnson2015density} relevant to this thesis, \autoref{sec:methodology:clustering} describes a methodology to use it as a \mst{} method, and \autoref{sec:results:clustering} discusses the investigation in \cite{DBLP:conf/bcb/McGovernJDBKV16}.
+%and determines whether it can be useful to supplement a \mst{} method like \krap{}.
 
-The clustering methods presented in \cite{DBLP:conf/bibm/MontanaDNBK11, montana2012investigating, SolimanDVMBNWKG12, montana2013ontological, montana2013algorithms} and \cite{johnson2015density} are examples of typical investigations into bacterial strain research.
+The clustering methods presented in \cite{montana2013algorithms, montana2013ontological, DBLP:conf/bibm/MontanaDNBK11, montana2012investigating, SolimanDVMBNWKG12} and \cite{johnson2015density} are examples of typical investigations into bacterial strain research.
 On their own, they do not constitute an actual \mst{} methodology\footnote{The work in \cite{DBLP:conf/bcb/McGovernJDBKV16} attempts to use clustering as a \mst{} technique.}.
 Ultimately, the goal of \cplop{} is to be able to objectively classify the \spec{} of an \ecoli{} \isol{}.
 Thus, merely clustering \isols{} is insufficient for \mst{}.
 This thesis presents \krap{}, an \mst{} technique that works with the \pyros{} of \isols{} in \cplop{} as a solution to \mst{}.
 
 \section{\kNN{} Techniques}
-A plethora of \kNNlong{} (\kNN{}) methods exist, but most are various attempts to optimize the search space --- either with efficient range queries or by leveraging information about the space to improve search speed --- or modifications to the neighbor list structure to improve classification.
-Surveys on \kNN{} techniques \cite{DBLP:journals/corr/abs-1007-0085, DBLP:conf/fskd/JiangCWJ07} show that each variation builds data structures for efficient query, or abstracts the notion of the usually \euclid{} metric to build a more accurate classifier, while others may weight the neighbors or remove neighbors from consideration based off of some criteria
+A plethora of \kNNlong{} (\kNN{})\footnote{See \autoref{sec:background:knn}.} methods exist, but most are various attempts to optimize the search space --- either with efficient range queries or by leveraging information about the space to improve search speed --- or modifications to the neighbor list structure to improve classification.
+Surveys on \kNN{} techniques \cite{DBLP:journals/corr/abs-1007-0085, DBLP:conf/fskd/JiangCWJ07} show that each variation builds data structures for efficient query, or abstracts the notion of the usually \euclid{} metric to build a more accurate classifier, while others may weight the neighbors or remove neighbors from consideration based off of some criteria.
 An exception to the typically euclidean distance metric comes in the way of recommender systems \cite{DBLP:reference/rsh/DesrosiersK11, DBLP:reference/sp/NingDK15}, which use a notion of similarity based off of scores.
 While efficient range query interests us, we have a solution for it in \cite{johnson2015density}.
 
 The method that most closely resembles what we are after comes from techniques that build multiple \kNN{} classifiers by generating feature subsets and polling the classifier to determine the class of the unknown datapoint \cite{DBLP:conf/icml/Bay98, DBLP:journals/ida/Bay99, DBLP:conf/icmlc/WangHWC05}.
-Similar to bagging and bootstrapping techniques used train other classification algorithms, the feature-set of known datapoints is either reasonably partitioned into feature-subsets \cite{DBLP:conf/icml/Bay98, DBLP:journals/ida/Bay99}, or clustered into subsets \cite{DBLP:conf/icmlc/WangHWC05}.
+Similar to bagging and bootstrapping techniques used to train other classification algorithms, the feature-set of known datapoints is either reasonably partitioned into feature-subsets \cite{DBLP:conf/icml/Bay98, DBLP:journals/ida/Bay99}, or clustered into subsets \cite{DBLP:conf/icmlc/WangHWC05}.
 Some even perturb the data and group features to create multiple \kNN{} classifiers \cite{DBLP:conf/icmlc/Juan10}.
 The resulting classification from the \kNN{} subset is then aggregated and the final classification is determined by majority voting.
 This approach will not apply to \cplop{}, since we do not merely have a single comparison metric that we want to partition into multiple to improve classification.
@@ -116,7 +118,7 @@ Many \kNN{} algorithms assume that the distance metric used --- usually \euclid{
 
 \krap{} can apply to other datasets with separate comparison metrics, especially those that contain types of features that \euclid{} does not apply to.
 For example, in a demographic study for, say, a political study, subjects may have a multitude of features with different metrics of comparison.
-Location of residence may be one and favorite color another\footnote{Certainly, many other psychological metrics can exist, but for simplicity's sake, let us consider only these two.}, with a goal of classifying a subject's political party.
+Location of residence may be one and favorite color another\footnote{Certainly, many other demographic and psychological metrics can exist, but for simplicity's sake, let us consider only these two.}, with a goal of classifying a subject's political party.
 Euclidean distance may not be appropriate for the location metric, since great-circle distance on a globe may encode closeness more accurately.
 For color, while it may be straightforward to represent red, green, and blue values as a vector, \euclid{} may not be the best choice to gauge similarity in color, certainly not in the same way as the great-circle distance, especially for the reasons put forth in \cite{mcleod2014proof}, which discusses the tremendous difficulties in building a uniform perceptive color space.
 Simply combining these two features into a single vector and performing \euclid{} may not produce the most appropriate results.

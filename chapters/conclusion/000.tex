@@ -13,12 +13,12 @@ To ascertain how well this technique classifies, we build a notion of cluster pu
 By calculating the proportion of the entire cluster that the most-plural \spec{} makes up, we hope to understand how a density-based clustering algorithm clusters the \cplop{} data.
 Furthermore, we inspect coverage and overall accuracy.
 
-Results are that we are able to cluster most of the \isols{} in \cplop{} with high accuracy. 
+Results are that for \minneigh{} between 1 and 5, respectively, we are able to cluster between 72.9\% and 52.1\% of the \isols{} in \cplop{}, with between 51.0\% and 41.2\% falling into pure clusters and another 34.4\% to 43.8\% falling into clusters where their \spec{} is the most dominant. 
 Most clusters have high purity and low number of unique species, which is promising for using this for \mst{}.
 Transient strains are also visible in the clustering technique, which will further aid the biologists working on \cplop{} in researching transient strains and improving \mst{} techniques. 
 Future work will leverage other \mst{} techniques designed for \cplop{} against this to make up for the lack of coverage and transient strains.
 \section{\krap{} Effectiveness}
-Generally, when using \kNN{}, it is preferred to use single digit $k$ values. Through our investigation of these various \kNN{} classification algorithms, we find that that general advice holds true. For our dataset, using $k\geq5$ does not produce much different results. Choosing $k<5$ is a dangerous notion, since it is likely that an outlier may make its way into the \knnlong{} list, confounding the results. Staying with $5\leq k\leq9$ appears to be a safe and reasonable option, providing a good balance between accuracy and filtering of isolates.
+Generally, when using \kNN{}, it is preferred to use single digit $k$ values. Through our investigation of these various \kNN{} classification algorithms, we find that that general advice holds true. For our dataset, using $k\geq5$ does not produce significantly different results. Choosing $k<5$ is a dangerous notion, since it is likely that an outlier may make its way into the \knnlong{} list, confounding the results. Staying with $5\leq k\leq9$ appears to be a safe and reasonable option, providing a good balance between accuracy and filtering of isolates.
 
 %\subsection{Choosing $\alpha$}
 Outside of this study, we choose to differentiate between strains of \ecoli{} using $\alpha=0.99$. It appears that using this value is advantageous. There were, however, some exceptions to those results, motivating us to consider non-thresholded \knnlong{} lists when classifying an unknown isolate.
@@ -32,7 +32,7 @@ Winner performs worst, classifying accurately between 65\% and 68\% of the time.
 
 Unionwise performs very well. Without filtering the \knnlong{} lists by $\alpha$, we find that the unionwise method classifies best, with an overall accuracy of 76.4\%. However, once we add in $\alpha$ filtering, the unionwise does not improve, staying relatively close to 76\%. 
 
-Intersection performs best when we use $\alpha$. This is likely due to the ``list'' actually being a set of common isolates. Overall, without filtering, the accuracy was 74.7\%, 78\%, and 85.9\% for $\alpha = $0.00, 0.98, and 0.99 respectively. 
+Intersection performs best when we use $\alpha$. This is likely due to the ``list'' actually being a set of common isolates. Overall, the accuracy was 74.7\%, 78\%, and 85.9\% for $\alpha = $0.00 (no filtering), 0.98, and 0.99 respectively. 
 
 Overall, we find that the intersection algorithm performs the best and recommend moving forward with it. While unionwise did perform well, it did not respond well to thresholding and still did not perform as well as the intersection algorithm overall. Meanwise and winner may be more useful with previously mentioned modifications and we may investigate these in the future.
 
@@ -46,3 +46,55 @@ Library population issues aside, environmental limitations are another concern f
 %Interestingly, environment factors in in another way, which our data shows about Bats . Classifying Bats is highly accurate and may be due to their limited involvement in other species' environment and small size. Cows have a wide variety of \ecoli{} strains, which allows them to show up in many other species' \knnlong{} lists. Bats on the other hand only have 37 \isol{}s in CPLOP all from a single \host{}, yet manage to be above 95\%, regardless of the method. We hypothesize that this is due to their limited interaction and we may investigate further.
 
 \section{Future Work}
+Future work should incorporate \krap{} into \cplop{}, study the \dbscan{} clustering method using the overall clustering entropy, and investigate whether combining the strain-based and \isol{}-based approach improves \mst{} and is more efficient on the \cplop{} database.
+Incorporating \krap{} into \cplop{} will provide researchers the ability to make transparent, repeatable assertions as to the \spec{} of an unknown \isol{}.
+Investigating clustering entropy can give us more insight into the makeup of clusters and extending this concept to \krap{} classifications, to measure how ``close the competition is'' between \spec{} in the \knnlong{} lists.
+Merging strains into the \krap{} methods will reduce the number of comparisons, since querying against the database will involve querying against clusters of \isols{}, as opposed to \isols{} themselves.
+Whether this benefits the accuracy of \mst{} with \cplop{} needs to be investigated.
+
+\subsection{\cplop{} Incorporation of \krap{}}
+Future work needs to incorporate \krap{} into \cplop{} directly, so \cp{} researchers have direct access to the \mst{} methodologies.
+\cplop{} researchers showed interest in viewing the \knnlong{} lists when using \krap{} on an \isol{}.
+Building an interactive \mst{} workflow can give researchers a better insight into \spec{} determinations and help them avoid having to painstakingly perform \mst{} by hand.
+Future work needs to at least make \krap{} available to researchers in \cplop{} and should consider building an visually interactive way of using it.
+
+\subsection{Entropy}
+Entropy \index{clustering entropy} is another validity measure that for clusterings, represents the ``degree to which each cluster consists of objects of a single class'' \cite{tan2006introduction} and for \krap{} can tell us how contentious the \spec{} determination was.
+Similar to the cluster and clustering purity, cluster and clustering entropy can give us an idea of the nature of \bslongs{} created by a clustering method.
+Ideally, a good clustering method minimizes the clustering entropy.
+
+Consider a cluster $C$, consisting of datapoints with class labels from $\mathcal{L}$.
+Given a class label $L\in\mathcal{L}$, the value $P_C(L)$ calculates the proportion of datapoints in $C$ that have class label $L$.
+The individual \textit{cluster entropy} is:
+\index{cluster entropy}
+\begin{equation}
+e(C) = \sum_{L\in\mathcal{L}}^{} P_C(L)\log_2{P_C(L)}
+\end{equation}
+
+In addition to computing the entropy of individual clusters we want to have an understanding of the overall entropy on the entire dataset for a given clustering.
+As before, given a \textit{clustering} $\mathcal{C} = \{C_1,\dots,C_n\}$ on a dataset, we define the size $\mathcal{M}$ of the set of clusters: 
+\index{clustering}
+\begin{equation}
+\mathcal{M} = \sum_{i = 1}^{n} |C_i|
+\end{equation}
+The overall \textit{clustering entropy} is:
+\index{clustering entropy}
+\begin{equation}\label{eq:clustering:entropy}
+\sum_{i=1}^{n} \frac{|C_i|}{\mathcal{M}}\cdot\nu(C_i)
+\end{equation}
+One can think of \eqref{eq:clustering:entropy} as a form of weighted arithmetic mean of the individual entropies.
+Larger clusters, as a result, affect this overall value more.
+Future work should use this metric to compare clusterings with different parameters or methodologies, seeking to minimize the entropy, and extend the analysis to \krap{} classifications.
+
+\subsection{\kNClong{}}
+Combining the strain-based and \isol{}-based method of classification is a natural next step.
+Using \krap{} as a simple fallback method when the strain-based method fails to classify an unknown \spec{} \isol{} is one approach.
+Incorporating strains directly into \krap{} is yet another, wherein the neighbors in the \knnlong{} list may be either \isols{} or strains --- which we can represent as clusters.
+As a result, we would instead have a \kNClong{} classification algorithm, through which, we can still apply the resolution strategies from \krap{}.
+Future work should consider different cluster weighting methods for the \spec{} in clusters that appear in the \knnlong{} list and determine whether any of them are useful for \mst{}.
+
+\subsection{Efficiency Study}
+The efficiency of the classification methodologies in this work and any combinations thereof needs to be investigated as well as their performance on the hardware that supports the \cplop{} database.
+Offline determination of strains, be it through clustering or otherwise, can occur offline, speeding up the determination of strain membership during \mst{}.
+Combining the two approaches in this work into a \kNClong{} methodology may also speed up \mst{}.
+\kNN{}, and \krap{} as a result, compares the unknown \isol{} to every datapoint in the database, but if instead the datapoints might be clusters, fewer comparisons may need to be made.

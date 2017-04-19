@@ -1,5 +1,17 @@
 \chapter{Implementation}\label{chap:implementation}
+There are two software components that comprise this work, one for clustering with \dbscan{}, which also creates the graphs of cluster metrics, and another for the \kraplong{} (\krap{}).
+Future work will incorporate \krap{} into \cplop{} for \mstlong{}.
+
 \section{Graphing Cluster Metrics}
-Forthcoming...
-\section{Resolution Algorithms}
-Forthcoming...
+The clustering code is comprised of two main parts: the clustering library from \cite{johnson2015density} and a series of scripts to graph the cluster metrics shown in \autoref{chap:clustering}.
+The clustering library queries a local instance of the \cplop{} database, performs the clustering, and saves the resulting clusters in a series of \pickle{}, \json{}, and \csv{} files.
+The graphing code then parses the clusters, counting the species in each cluster and calculating the purity in order to build the series of graphs.
+All of this code is written in \python{} and uses \matplotlib{} for graphing.
+The clustering library is described in \cite{johnson2015density}and found at \url{https://github.com/ejohns32/Thesis-Code}.
+The code written for this work does not change any of it, but instead adds code to control relevant pieces and graph the metrics.
+
+\section{The \kraplong{}}
+The code for the \kraplong{} (\krap{}) is a \java{} library that performs the evaluation described in \autoref{sec:evaluation:krap}.
+It queries a local instance of the \cplop{} database and for each \cplop{} \isol{}, it performs cross-validation with holdout for a range of \k{} values, \a{} values, and with each resolution strategy.
+It saves the classification results as a \csv{}, which a \python{} script graphs using \matplotlib{}.
+The code resides at \url{https://github.com/jmcgover/k-rap} as well as relevant documentation.

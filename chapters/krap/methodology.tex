@@ -1,12 +1,13 @@
-\section{Methodology}\label{sec:methodology:krap}
-Due to the two-\itsshort{}-region nature of \ecoli{} \isols{} in \cplop{}\footnote{see \autoref{sec:isolates}}, we effectively have two \compfuncs{} between datapoints (\isols{}), complicating our use of \kNN{}.
+Since each \ecoli{} \isol{} in \cplop{} has a \pyro{} of two separate \itsshort{} regions\footnote{see \autoref{sec:background:isolates}}, we effectively have two \compfuncs{} between datapoints (\isols{}), complicating our use of \kNN{}.
 \kNN{} provides \cplop{} biologists a transparent and intuitive way of understanding the \spec{} classification it asserts, so we find that it will be a usefully insightful .
-Applying \kNN{} to \cplop{} \isols{} gives us two lists, one for each \itsshort{} region, that we must make a classification from.
-In order to accommodate multiple \compfuncs{}, we need a multiple-\knnlong{} list resolution strategy.
+Applying \kNN{} to \cplop{} \isols{} gives us two lists, one for each \itsshort{} region, that we must make a single \spec{} classification from.
+In order to accommodate multiple \compfuncs{}, we need a strategy to resolve multiple \knnlong{} lists.
 Rather than create a new similarity metric out of a pair of similarity scores, which may deviate from the inherent nature of the \compfunc{}, we choose to update the \kNN{} method with four different ways of selecting the resultant category label: the \kraplong{} (\krap{}).
 %We propose the \krap{}, four strategies to resolve these multiple \knnlong{} lists that multiple \compfuncs{} result in.
 %Furthermore, \kNN{} provides \cplop{} biologists a transparent and intuitive way of understanding the \spec{} classification it asserts.
-These four methods are described below.
+We describe these four methods, the evaluation criteria we judge them by, and their results below.
+
+\section{Methodology}\label{sec:methodology:krap}
 
 In what follows, we generalize our problem. Given \UNKNOWN{} and \KNOWN{}, two library objects (\isols{}), and a collection of \compfuncs{}, \COMP{}$=(\COMP{}_1,\ldots \COMP{}_m)$, with $m > 1$, comparing \UNKNOWN{} to \KNOWN{} gives us a collection of values:  
 $\COMP{}(\UNKNOWN{},\KNOWN{}) = (\COMP{}_1(\UNKNOWN{},\KNOWN{}),\ldots,\COMP{}_m(\UNKNOWN{},\KNOWN{}))$.
@@ -32,7 +33,8 @@ where $\pcfunclabel(\cdot,\cdot)$ is between \pyros{} of the same \itsshort{} re
 
 \input{algorithms/comparison}
 
-\subsection{\a{} Filtering}
+%%%%%%%%%% FILTER %%%%%%%%%%
+\subsection{\a{} Filtering}\index{\a{} filtering}
 Our first modification to \kNN{} is an additional condition at step \ref{knn:filter}, after finding the \knnlong{}:
 \begin{enumerate}
 \setcounter{enumi}{3}
@@ -42,30 +44,268 @@ The $\alpha$ threshold allows biologists to filter out neighbors that are among 
 When comparing multiple \pyro{}s of the same region of a single \isol{} for quality control, the \pearson{} between them is strictly above 0.995.
 As a result, for many other studies --- not necessarily MST-focused --- \cplop{} researchers use a \pearson{} of 0.990 or above to define a strain of \ecoli{}.
 Filtering by some value near this may give more accurate results and provides an intuitive way to relate these lists to other studies.
+
+Using the example from Figures~\ref{fig:knn-graph} and \ref{fig:knn}, \autoref{fig:alpha-filter} shows how when using \kNN{} where \k{} = 9, we can further restrict the \knnlong{} list if we believe \kNN{} should ignore any datapoints outside of \a{}.
+For \autoref{fig:alpha-filter}, \euclid{} is the chosen \compfunc{} and using an \a{} threshold to filter means we filter any datapoints from the \knnlong{} list if the similarity value is \textit{above} \a{}.
+\cplop{} uses \pyros{} as datapoints and the \pearson{} to compare \pyros{};
+the \pearson{} similarity value ranges from -1 to 1, where a \pearson{} close to 1 denotes highly similar datapoints.
+Thus, filtering using an \a{} threshold on \pearson{} values requires filtering datapoints that are \textit{below} \a{}.
+\autoref{alg:filter} describes this process in pseudocode.
+
+\begin{figure}
+\centering
+\begin{tabular}{|c|c|c|c|}             \hline
+    \k{} & Class   & Position & Similarity    \\ \hline
+         & \unknownchar{}& (5,5) & 0.000       \\ \hline\hline
+  \rowcolor{\bcolor}  1    & \bchar{}      & (6,6) & 1.414       \\ \hline
+  \rowcolor{\acolor}  \ac2    & \ac\achar{}      & \ac(3,6) & \ac2.236       \\ \hline
+  \rowcolor{\acolor}  \ac3    & \ac\achar{}      & \ac(4,7) & \ac2.236       \\ \hline
+  \rowcolor{\ccolor}  4    & \cchar{}      & (3,3) & 2.828       \\ \hline
+  \rowcolor{\bcolor}  5    & \bchar{}      & (8,5) & 3.000       \\ \hline
+  \rowcolor{\bcolor}  6    & \bchar{}      & (6,8) & 3.162       \\ \hline
+  \rowcolor{\ccolor}  7    & \cchar{}      & (3,2) & 3.606       \\ \hline
+  \rowcolor{gray}  8    & \cchar{}      & (1,3) & 4.472       \\ \hline
+  \rowcolor{gray}  9    & \cchar{}      & (1,1) & 5.657       \\ \hline
+  %\rowcolor{\acolor} \ac10    & \ac\achar{}      & \ac(1,10) & \ac6.403       \\ \hline
+\end{tabular}
+\caption{For \k{} = 9, filtering the \knnlong{} by \a{} = 4.000 ends up dropping the last two datapoints (marked in gray) off of the list, changing the resultant classification from \cchar{} to \bchar{}. In the case of \euclid{}, using \a{} means we filter any \euclid{} \textit{above} \a{}.}
+\label{fig:alpha-filter}
+\end{figure}
+
 \input{algorithms/filter}
 
+%%%%%%%%%% MEAN %%%%%%%%%%
 \subsection{\rmean{}}
-For \UNKNOWN{} and a $\SOMEPYRO\in\LIB{}$, we take the mean of the result of all of the \compfuncs{} and build a single \knnlong{} list from it.
-The mean can be any metric mapping $\R^n\times\R^n\rightarrow\R$ and in the investigated implementation, we use the euclidean distance, also known as the $L^2$ norm.
+\rmean{} combines the result of the two comparisons between two \isols{} in order to build a single \knnlong{} list, from which simple \kNN{} proceeds to classify.
+Combining the similarity values from the two \compfuncs{} is simply a mapping from the two similarity values to a single value.
+Arithmetic mean, geometric mean, and \euclid{} are examples, but we chose to use \euclid{}.
+\autoref{fig:meanwise:example} depicts an example classifying an unknown \isol{} \UNKNOWN{} using the arithmetic mean as the mean function.
+
+\begin{figure}
+\centering
+\begin{tabular}{c|c|c|c|c|c}
+    \k{} & \Isol{} $x$ & \Spec{} & $\pcsixt(u,x)$ & $\pcfive{}(u,x)$ & $\mathit{mean}(\pcsixt{}, \pcfive{})$  \\ \hline\hline
+    1 & $a$ & Cat       & 0.994 & 0.991 &  0.993 \\ \hline
+    2 & $b$ & Dog       & 0.990 & 0.994 &  0.992 \\ \hline
+    3 & $c$ & Dog       & 0.995 & 0.989 &  0.992 \\ \hline
+    4 & $d$ & Chicken   & 0.985 & 0.987 &  0.986 \\ \hline
+    5 & $e$ & Cat       & 0.980 & 0.990 &  0.985 \\ \hline
+    6 & $f$ & Cat       & 0.978 & 0.990 &  0.984 \\ \hline
+    7 & $g$ & Cat       & 0.980 & 0.984 &  0.982 \\ \hline
+    8 & $h$ & Chicken   & 0.952 & 0.960 &  0.956 \\ \hline
+    %9 & $i$ & Chicken   & 0.952 & 0.946 &  0.948 \\ \hline
+\end{tabular}
+\caption{An example classifying an unknown \isol{} \UNKNOWN{} using \rmean{} with \k{} = 8, where the mean function is the arithmetic average of the two \pcfunclabel{} values.}
+\label{fig:meanwise:example}
+\end{figure}
+
+Formally: For \UNKNOWN{} and a $\SOMEPYRO\in\LIB{}$, we take the mean of the result of all of the \compfuncs{} and build a single \knnlong{} list from it.
+The mean can be any metric mapping $\R\times\R\rightarrow\R$ and in the investigated implementation, we use the \euclid{}, also known as the $L^2$ norm.
 A single \knnlong{} list results from this algorithm that we filter by $k$ and $\alpha$ and use to classify the unknown.
 \autoref{alg:mean} describes this process in pseudocode.
 \input{algorithms/mean}
 
+%%%%%%%%%% WINNER %%%%%%%%%%
 \subsection{\rwinner{}}
-For each \compfunc{}, we make a \knnlong{} list and filter by $k$ and $\alpha$ accordingly.
+\rwinner{} performs \kNN{} classification on the two \knnlong{} lists resulting from the two \compfuncs{}, \pcfunclabel{} on \Ssixt{} and \pcfunclabel{} on \Sfive{}, picking the \spec{} with the highest number of instances in its original list.
+In this way, the strategy picks the ``winning'' classification from the two lists.
+\autoref{fig:winner:example} shows how this works.
+
+\begin{figure}
+\centering
+\subfloat[A \k{} = 8 nearest neighbors list for the \Ssixt{} region of an unknown \isol{}.]{
+\begin{tabular}{c|c}
+     \k{} (\Ssixt{}) & \Spec{}  \\ \hline \hline
+     1 & Bat \\ \hline
+     2 & Bat \\ \hline
+     3 & Cat \\ \hline
+     4 & Pigeon \\ \hline
+     5 & Pigeon \\ \hline
+     6 & Human \\ \hline
+     7 & Human \\ \hline
+     8 & Bat \\ \hline
+\end{tabular}
+}
+\quad
+\subfloat[A \k{} = 8 nearest neighbors list for the \Sfive{} region of an unknown \isol{}.]{
+\begin{tabular}{c|c}
+     \k{} (\Sfive{}) & \Spec{}  \\ \hline \hline
+     1 & Pigeon \\ \hline
+     2 & Bat \\ \hline
+     3 & Cat \\ \hline
+     4 & Pigeon \\ \hline
+     5 & Bat \\ \hline
+     6 & Pigeon \\ \hline
+     7 & Cat \\ \hline
+     8 & Pigeon \\ \hline
+\end{tabular}
+}
+\caption{In this example of \rwinner{} for \k{} = 8, \kNN{} on the \Ssixt{} region results in a classification of Bat, since there are 3 bats in its \knnlong{} list and \kNN{} on \Sfive{} results in Pigeon, since there are 4 Pigeons in its \knnlong{} list. The classification resulting from these two lists is Pigeon, since Pigeon shows up more in its original list.}
+\label{fig:winner:example}
+\end{figure}
+
+Formally: For each \compfunc{}, we make a \knnlong{} list and filter by $k$ and $\alpha$ accordingly.
 Once we finish building each \compfunc{}'s \knnlong{} list, we find the most plural classification from each list and track the number of times that classification shows up in that list.
 Then, we classify $u$ based off the classification that has the highest number in its corresponding list.
 \autoref{alg:winner} describes this process in pseudocode.
 \input{algorithms/winner}
 
+%%%%%%%%%% UNION %%%%%%%%%%
 \subsection{\runion{}}
-For each \compfunc{}, we make a \knnlong{} list and filter by $k$ and $\alpha$ accordingly.
+\runion{} builds a list that is the union of both \knnlong{} lists, classifying the unknown as the most dominant species in the resulting union
+It may be that the most dominant \spec{} in each list is different, but a second or third most dominant \spec{} may be more appropriate since it shows up in both lists.
+\autoref{fig:union:example} shows an example of this.
+
+In \autoref{fig:union:example}, Figures~\ref{fig:union:example:ssixt} and \ref{fig:union:example:sfive} show the \knnlong{} lists for \Ssixt{} and \Sfive{} respectively.
+The dominant \spec{} in each are Human, with 5 instances, and Turkey, with 4 instances.
+Combining these into a union of the two in \autoref{fig:union:example:union}\footnote{The union depicted in \autoref{fig:union:example:union} contains the original \k{} for clarity of entry source. These values can help with tie breaking as well, if breaking ties based on average position, or lowest \k{}.}, we see that the dominant \spec{} is Dog with 6 instances in the union, due to the 3 instances of Dog in each \itsshort{} \knnlong{} list.
+
+\begin{figure}
+\centering
+\subfloat[A \k{} = 8 nearest neighbors list for the \Ssixt{} region of an unknown \isol{}.]{\label{fig:union:example:ssixt}
+\begin{tabular}{c|c}
+     \k{} (\Ssixt{}) & \Spec{}  \\ \hline \hline
+     1 & Dog \\ \hline
+     2 & Human \\ \hline
+     3 & Human \\ \hline
+     4 & Human \\ \hline
+     5 & Dog \\ \hline
+     6 & Dog \\ \hline
+     7 & Human \\ \hline
+     8 & Human \\ \hline
+\end{tabular}
+}
+\quad
+\subfloat[A \k{} = 8 nearest neighbors list for the \Sfive{} region of an unknown \isol{}.]{\label{fig:union:example:sfive}
+\begin{tabular}{c|c}
+     \k{} (\Sfive{}) & \Spec{}  \\ \hline \hline
+     1 & Turkey \\ \hline
+     2 & Dog \\ \hline
+     3 & Dog \\ \hline
+     4 & Turkey \\ \hline
+     5 & Turkey \\ \hline
+     6 & Dog \\ \hline
+     7 & Turkey \\ \hline
+     8 & Cow \\ \hline
+\end{tabular}
+}
+\\
+\subfloat[Resulting union of the \knnlong{} lists from each \itsshort{} region.]{
+\begin{tabular}{c|c|c}
+    Region      & \k{}  & \Spec{}\\ \hline \hline
+    \Ssixt{}    & 1     & Dog \\ \hline
+    \Sfive{}    & 1     & Turkey \\ \hline
+    \Ssixt{}    & 2     & Human \\ \hline
+    \Sfive{}    & 2     & Dog \\ \hline
+    \Ssixt{}    & 3     & Human \\ \hline
+    \Sfive{}    & 3     & Dog \\ \hline
+    \Ssixt{}    & 4     & Human \\ \hline
+    \Sfive{}    & 4     & Turkey \\ \hline
+    \Ssixt{}    & 5     & Dog \\ \hline
+    \Sfive{}    & 5     & Turkey \\ \hline
+    \Ssixt{}    & 6     & Dog \\ \hline
+    \Sfive{}    & 6     & Dog \\ \hline
+    \Ssixt{}    & 7     & Human \\ \hline
+    \Sfive{}    & 7     & Turkey \\ \hline
+    \Ssixt{}    & 8     & Human \\ \hline
+    \Sfive{}    & 8     & Cow \\ \hline
+\end{tabular}
+}
+\quad
+\subfloat[\Spec{} counts of all three lists, \Ssixt{}, \Sfive{}, and the union of the two.]{\label{fig:union:example:union}
+\begin{tabular}{c|c|c}
+List & \Spec{} & Count \\\hline \hline
+\Ssixt{} & Human & 5 \\\hline
+\Ssixt{} & Dog & 3 \\\hline \hline
+\Sfive{} & Turkey & 4 \\\hline
+\Sfive{} & Dog & 3 \\\hline
+\Sfive{} & Cow & 1 \\\hline \hline
+Union & Dog & 6 \\\hline
+Union & Human & 5 \\\hline
+Union & Turkey & 4 \\\hline
+Union & Cow & 2 \\\hline
+\end{tabular}
+}
+\caption{In this example of \runion{} for \k{} = 8, we see that when considering each \itsshort{} \knnlong{} list separately, there are two different dominant \spec{}. 
+}
+\label{fig:union:example}
+\end{figure}
+
+Formally: For each \compfunc{}, we make a \knnlong{} list and filter by $k$ and $\alpha$ accordingly.
 After building each \knnlong{} list, we combine the lists into a set, keeping track of the original list position for tie-breaking.
 From this set, which we dub the union, we count the classifications present in the union and classify $u$ as the most plural in the union of the lists, compared to the other lists.
 \autoref{alg:union} describes this process in pseudocode.
 \input{algorithms/union}
 
+%%%%%%%%%% INTERSECTION %%%%%%%%%%
 \subsection{\rintersect{}}
+\rintersect{} works to build a single set of size \k{}, called the intersection, consisting only of \isols{} that appear in both \itsshort{} \knnlong{} lists.
+It does this by initially querying for each \itsshort{} region, expanding the list until the intersection is the required size --- \k{}.
+This is the most complicated and restrictive of the resolution strategies, possibly requiring \a{} filtering in order to restrict the search.
+Filtering by \a{} means the construction on the intersection stops if expanding the \knnlong{} means going outsidethe \a{} threshold, which may result in an intersection that is smaller than \k{}\footnote{Since the same is true for natural \kNN{}, we find this acceptable.}.
+
+\autoref{fig:intersection:example} shows how this strategy proceeds.
+In \autoref{fig:intersection:example:ssixt}, we see that there are many Cows in the \Ssixt{} \knnlong{} list, but few of those \isols{} show up in the \Sfive{} \knnlong{} list in \autoref{fig:intersection:example:sfive}.
+We then build the intersection, shown in \autoref{fig:intersection:example:intersection}, but there are not enough common \isols{} to make a \k{}=8 sized intersection, so we must extend the initial lists to 13 in order to find enough common \isols{}.
+Once we have found enough common \isols{}, \kNN{} can proceed normally on the intersection.
+
+\begin{figure}
+\centering
+\subfloat[A \k{} = 8 nearest neighbors list including (fabricated) \isol{} IDs for the \Ssixt{} region of an unknown \isol{}, extended in order to find \isols{} in common with the \Sfive{} list, which are bold.]{\label{fig:intersection:example:ssixt}
+\begin{tabular}{c|c|c}
+ \k{} (\Ssixt{}) & \Isol{} ID & \Spec{} \\ \hline \hline
+ \bf 1      &\bf  5823 &\bf Pig \\ \hline
+ \bf 2      &\bf  2833 &\bf Pig \\ \hline
+ 3          &     8873 & Cow \\ \hline
+ \bf 4      &\bf  5939 & \bf Cow \\ \hline
+ 5          &     6156 & Cow \\ \hline
+ 6          &     3676 & Human \\ \hline
+ 7          &     7853 & Cow \\ \hline
+ \bf 8      &\bf  5331 &\bf Cow \\ \hline\hline
+ 9          &     2189 & Cow \\ \hline
+ \bf 10     &\bf  2053 &\bf Pig \\ \hline
+ \bf 11     &\bf  8962 &\bf Pig \\ \hline
+ \bf 12     &\bf  3813 &\bf Human \\ \hline
+ \bf 13     &\bf  8173 &\bf Pig \\ \hline
+\end{tabular}
+}
+\quad
+\subfloat[A \k{} = 8 nearest neighbors list including (fabricated) \isol{} IDs for the \Sfive{} region of an unknown \isol{}, extended in order to find \isols{} in common with the \Ssixt{} list, which are bold.]{\label{fig:intersection:example:sfive}
+\begin{tabular}{c|c|c}
+ \k{} (\Ssixt{}) & \Isol{} ID & \Spec{} \\ \hline \hline
+ \bf 1      &\bf   2833 &\bf Pig \\ \hline
+ 2          &      2916 & Cow \\ \hline
+ \bf 3      &\bf   3813 &\bf Human \\ \hline
+ \bf 4      &\bf   5939 &\bf Cow \\ \hline
+ 5          &      6854 & Dog \\ \hline
+ \bf 6      &\bf   5823 &\bf Pig \\ \hline
+ \bf 7      &\bf   2053 &\bf Pig \\ \hline
+ 8          &      8485 & Dog \\ \hline \hline
+ \bf 9      &\bf   8173 &\bf Pig \\ \hline
+ 10         &      6497 & Human \\ \hline
+ 11         &      9208 & Cow \\ \hline
+ \bf 12     &\bf   5331 &\bf Cow \\ \hline
+ \bf 13     &\bf   8962 &\bf Pig \\ \hline
+\end{tabular}
+}
+\\
+\subfloat[Common isolates in the \Ssixt{} and \Sfive{} \knnlong{} lists, sorted by average \k{}.]{\label{fig:intersection:example:intersection}
+\begin{tabular}{c|c|c|c}
+\k{} (\Ssixt{}) & \k{} (\Sfive{}) & \Isol{} ID & \Spec{} \\ \hline \hline
+ 2  & 1 & 2833 & Pig \\ \hline %1.5
+ 1  & 6 & 5823 & Pig \\ \hline %3.5
+ 4 & 4 & 5939 & Cow \\ \hline %4
+ 12 & 3 & 3813 & Human \\ \hline %7.5
+ 10 & 7 & 2053 & Pig \\ \hline %8.5
+ 8 & 12 & 5331 & Cow \\ \hline %10
+ 13 & 9 & 8173 & Pig \\ \hline %11
+ 11 & 13 & 8962 & Pig \\ \hline %12
+\end{tabular}
+}
+\caption{An example \rintersect{} for \k{} = 8 showing how the original \knnlong{} lists did not have enough \isols{} --- 8 are needed --- in common, but when extended out to 15, there are 8 common \isols{}. From here, classification can proceed to classify the unknown as the most dominant \spec{} in the intersection, Pig.}
+\label{fig:intersection:example}
+\end{figure}
+
 For each \compfunc{}, we make a \knnlong{} list and filter by $k$ and $\alpha$ accordingly, but ensure that we do not lose track of the entire sorted list of results.
 After building each \knnlong{} list, we inspect each list for common \isol{}s.
 We add \isol{}s that appear in every list into a set that we call the intersection.
